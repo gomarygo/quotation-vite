@@ -3,6 +3,7 @@ import { useState } from 'react';
 interface DiscountItem {
   label: string;
   amount: number;
+  type: 'percentage' | 'fixed';
 }
 
 interface QuotationFormProps {
@@ -32,6 +33,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [discounts, setDiscounts] = useState<DiscountItem[]>([]);
   const [discountLabel, setDiscountLabel] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
+  const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('fixed');
   const [note, setNote] = useState(
     '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공'
   );
@@ -48,7 +50,12 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const calculateTotalAmount = () => {
     if (!headcount) return 0;
     const subtotal = unitPrice * headcount * months;
-    const totalDiscount = discounts.reduce((sum, d) => sum + d.amount, 0);
+    const totalDiscount = discounts.reduce((sum, d) => {
+      if (d.type === 'percentage') {
+        return sum + (subtotal * (d.amount / 100));
+      }
+      return sum + d.amount;
+    }, 0);
     const supplyAmount = subtotal - totalDiscount;
     const vat = Math.round(supplyAmount / 11);
     return supplyAmount + vat;
@@ -56,7 +63,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
 
   const handleAddDiscount = () => {
     if (discountLabel && discountAmount) {
-      setDiscounts([...discounts, { label: discountLabel, amount: discountAmount }]);
+      setDiscounts([...discounts, { label: discountLabel, amount: discountAmount, type: discountType }]);
       setDiscountLabel('');
       setDiscountAmount(0);
     }
@@ -106,26 +113,30 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       </div>
       <div>
         <label>서비스 기간:<br />
-          <input type="date" value={serviceStart} onChange={e => setServiceStart(e.target.value)} required /> ~
-          <input type="date" value={serviceEnd} onChange={e => setServiceEnd(e.target.value)} required />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <input type="date" value={serviceStart} onChange={e => setServiceStart(e.target.value)} required />
+            <span>~</span>
+            <input type="date" value={serviceEnd} onChange={e => setServiceEnd(e.target.value)} required />
+            <span style={{ marginLeft: '8px' }}>({months}개월)</span>
+          </div>
         </label>
       </div>
       <div>
         <label>1인당 월 단가:<br />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <input type="number" value={unitPrice} onChange={e => setUnitPrice(Number(e.target.value))} required />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+            <input type="number" value={unitPrice} onChange={e => setUnitPrice(Number(e.target.value))} required style={{ textAlign: 'right' }} />
             <span>원</span>
           </div>
         </label>
       </div>
       <div>
         <label>총 금액 (부가세 포함):<br />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
             <input 
               type="text" 
               value={calculateTotalAmount().toLocaleString()} 
               readOnly 
-              style={{ backgroundColor: '#f5f5f5' }}
+              style={{ backgroundColor: '#f5f5f5', textAlign: 'right' }}
             />
             <span>원</span>
           </div>
@@ -133,16 +144,43 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       </div>
       <div>
         <label>할인 항목:<br /></label>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input placeholder="할인명" value={discountLabel} onChange={e => setDiscountLabel(e.target.value)} />
-          <input type="number" placeholder="금액" value={discountAmount} onChange={e => setDiscountAmount(Number(e.target.value))} />
+          <select value={discountType} onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}>
+            <option value="fixed">금액 할인</option>
+            <option value="percentage">% 할인</option>
+          </select>
+          <input 
+            type="number" 
+            placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
+            value={discountAmount} 
+            onChange={e => setDiscountAmount(Number(e.target.value))} 
+          />
           <button type="button" onClick={handleAddDiscount}>추가</button>
         </div>
         <ul>
           {discounts.map((d, i) => (
-            <li key={i}>{d.label}: {d.amount.toLocaleString()}원 <button type="button" onClick={() => handleRemoveDiscount(i)}>삭제</button></li>
+            <li key={i}>
+              {d.label}: {d.type === 'percentage' ? `${d.amount}%` : `${d.amount.toLocaleString()}원`} 
+              <button type="button" onClick={() => handleRemoveDiscount(i)}>삭제</button>
+            </li>
           ))}
         </ul>
+        {discounts.length > 0 && (
+          <div>
+            <label>최종 금액 (부가세 포함):<br />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+                <input 
+                  type="text" 
+                  value={calculateTotalAmount().toLocaleString()} 
+                  readOnly 
+                  style={{ backgroundColor: '#f5f5f5', textAlign: 'right' }}
+                />
+                <span>원</span>
+              </div>
+            </label>
+          </div>
+        )}
       </div>
       <div>
         <label>비고:<br /><textarea value={note} onChange={e => setNote(e.target.value)} rows={4} style={{ width: '100%' }} /></label>
