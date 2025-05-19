@@ -502,7 +502,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               padding: '8px',
               resize: 'vertical'
             }} 
-            onKeyDown={e => {/* 마지막 필드이므로 엔터 시 제출 허용 */}}
+            onKeyDown={() => {}}
             placeholder="예) 특이사항, 요청사항 등"
           />
         </label>
