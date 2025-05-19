@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 interface DiscountItem {
   label: string;
   amount: number;
+  type: 'percentage' | 'fixed';
 }
 
 interface QuotationPreviewProps {
@@ -66,7 +67,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   const supplyAmount = subtotal - totalDiscount;
   const vat = Math.round(supplyAmount * 0.1);
   const total = supplyAmount + vat;
-  const finalAmount = total;
+  const finalAmount = total - totalDiscount;
 
   // 한글 금액 변환 함수
   const convertToKoreanNumber = (num: number): string => {
@@ -130,7 +131,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div style={{ position: 'relative' }}>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 0, top: -60, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 160, top: -60, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
           <div style={{ position: 'relative' }}>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
@@ -167,16 +168,20 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>1인당 월 단가</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.unitPrice.toLocaleString()}원</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>인원</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.headcount}명</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>공급가액</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{supplyAmount.toLocaleString()}원</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>부가세</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{(supplyAmount * 0.1).toLocaleString()}원</td></tr>
-            <tr style={{ background: '#e8f0fe' }}><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, textAlign: 'center' }}>총 금액</td><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#1a73e8' }}>{total.toLocaleString()}원</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>총 금액</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{total.toLocaleString()}원</td></tr>
             {data.discounts.length > 0 && data.discounts.map((d, i) => (
-              <tr key={i}><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red' }}>{d.label}</td><td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center' }}>-{calculateDiscountAmount(d, subtotal).toLocaleString()}원</td></tr>
+              <tr key={i}>
+                <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red' }}>{d.label}</td>
+                <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center' }}>
+                  -{calculateDiscountAmount(d, subtotal).toLocaleString()}원
+                  {d.type === 'percentage' && ` (${d.amount}% 할인)`}
+                </td>
+              </tr>
             ))}
             {data.discounts.length > 0 && (
               <tr style={{ background: '#f8f8f8' }}>
                 <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center' }}>최종 견적가</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#1a73e8' }}>
+                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#000' }}>
                   {finalAmount.toLocaleString()}원
                   <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(finalAmount))})</span>
                 </td>
