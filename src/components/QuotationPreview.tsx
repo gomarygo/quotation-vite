@@ -38,6 +38,11 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   const vat = Math.round(supplyAmount / 11);
   const total = supplyAmount + vat;
 
+  // 작성일자 및 문서번호 생성
+  const today = new Date();
+  const docDate = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+  const docNumber = `${docDate}-001`;
+
   const handleDownloadPdf = async () => {
     if (!printRef.current) return;
     const canvas = await html2canvas(printRef.current);
@@ -55,7 +60,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         {/* 제목 */}
         <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 수신자 및 안내문구 */}
-        <div style={{ marginBottom: 16, fontSize: 16, textAlign: 'center' }}>
+        <div style={{ marginBottom: 16, fontSize: 16, textAlign: 'left' }}>
           <b>수신:</b> {data.recipient} 귀하<br />
           귀사의 무궁한 발전을 기원합니다.<br />
           아래와 같이 견적드리오니 검토 부탁드립니다.
@@ -63,12 +68,32 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         {/* 작성일자, 문서번호, 회사 정보 및 직인 */}
         <div style={{ position: 'relative', marginBottom: 24, width: '100%' }}>
           <div style={{ fontSize: 14, lineHeight: 1.8 }}>
-            <div><b>작성일자:</b> {new Date().toISOString().slice(0, 10).replace(/-(\d{2})-(\d{2})$/, '년 $1월 $2일')}</div>
-            <div><b>문서번호:</b> 20250515-844</div>
+            <div><b>작성일자:</b> {today.toISOString().slice(0, 10).replace(/-(\d{2})-(\d{2})$/, '년 $1월 $2일')}</div>
+            <div><b>문서번호:</b> {docNumber}</div>
             <div><b>상호:</b> (주)튜링</div>
-            <div style={{ display: 'inline-block', position: 'relative' }}>
+            <div style={{ display: 'inline-block', position: 'relative', verticalAlign: 'top', minHeight: 100 }}>
               <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
-              <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: -110, top: -20, width: 100, height: 100, objectFit: 'contain', pointerEvents: 'none', opacity: 0.85 }} />
+              <img 
+                src="/stamp.png" 
+                alt="직인" 
+                style={{ 
+                  position: 'absolute', 
+                  right: -110, 
+                  top: -20, 
+                  width: 100, 
+                  height: 100, 
+                  objectFit: 'contain', 
+                  pointerEvents: 'none', 
+                  opacity: 0.95, 
+                  background: 'transparent',
+                  zIndex: 2,
+                  border: 'none',
+                  overflow: 'visible',
+                  boxShadow: 'none',
+                  maxWidth: 'none',
+                  maxHeight: 'none',
+                }} 
+              />
             </div>
             <div><b>전화:</b> 070-4281-4869</div>
             <div><b>사업자등록번호:</b> 254-87-01382</div>
