@@ -9,7 +9,7 @@ interface QuotationFormProps {
   onSubmit: (data: any) => void;
 }
 
-const planTypes = ['기본형', '프리미엄', '커스텀'];
+const planTypes = ['기본형', '환급형'];
 
 const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [schoolName, setSchoolName] = useState('');
