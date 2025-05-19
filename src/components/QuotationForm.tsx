@@ -71,6 +71,9 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
     setUnitPrice(initialData.unitPrice ?? 9900);
     setDiscounts(initialData.discounts ?? []);
     setNote(initialData.note ?? '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공');
+    setDiscountLabel('');
+    setDiscountAmount('');
+    setDiscountType('fixed');
   }, [initialData]);
 
   const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<any>) => {
