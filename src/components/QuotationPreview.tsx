@@ -73,27 +73,29 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             <div><b>상호:</b> (주)튜링</div>
             <div style={{ display: 'inline-block', position: 'relative', verticalAlign: 'top', minHeight: 100 }}>
               <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
-              <img 
-                src="/stamp.png" 
-                alt="직인" 
-                style={{ 
-                  position: 'absolute', 
-                  right: -110, 
-                  top: -20, 
-                  width: 100, 
-                  height: 100, 
-                  objectFit: 'contain', 
-                  pointerEvents: 'none', 
-                  opacity: 0.95, 
-                  background: 'transparent',
-                  zIndex: 2,
-                  border: 'none',
-                  overflow: 'visible',
-                  boxShadow: 'none',
-                  maxWidth: 'none',
-                  maxHeight: 'none',
-                }} 
-              />
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <img 
+                  src="/stamp.png" 
+                  alt="직인" 
+                  style={{ 
+                    position: 'absolute', 
+                    left: '100%', 
+                    top: '-30px', 
+                    width: '80px', 
+                    height: '80px', 
+                    objectFit: 'none', 
+                    pointerEvents: 'none', 
+                    opacity: 0.7, 
+                    background: 'transparent',
+                    zIndex: 10,
+                    border: 'none',
+                    overflow: 'visible',
+                    boxShadow: 'none',
+                    maxWidth: 'none',
+                    maxHeight: 'none',
+                  }} 
+                />
+              </span>
             </div>
             <div><b>전화:</b> 070-4281-4869</div>
             <div><b>사업자등록번호:</b> 254-87-01382</div>
