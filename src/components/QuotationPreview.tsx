@@ -38,10 +38,14 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   const vat = Math.round(supplyAmount / 11);
   const total = supplyAmount + vat;
 
-  // 작성일자 및 문서번호 생성
-  const today = new Date();
-  const docDate = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+  // 작성일자 및 문서번호 생성 (한국시간)
+  const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const yyyy = koreaNow.getUTCFullYear();
+  const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
+  const docDate = `${yyyy}${mm}${dd}`;
   const docNumber = `${docDate}-001`;
+  const docDateStr = `${yyyy}년 ${mm}월 ${dd}일`;
 
   const handleDownloadPdf = async () => {
     if (!printRef.current) return;
@@ -56,59 +60,39 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
 
   return (
     <div style={{ marginTop: 32 }}>
-      <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative' }}>
-        {/* 제목 */}
-        <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
-        {/* 수신자 및 안내문구 */}
-        <div style={{ marginBottom: 16, fontSize: 16, textAlign: 'left' }}>
-          <b>수신:</b> {data.recipient} 귀하<br />
-          귀사의 무궁한 발전을 기원합니다.<br />
-          아래와 같이 견적드리오니 검토 부탁드립니다.
-        </div>
-        {/* 작성일자, 문서번호, 회사 정보 및 직인 */}
-        <div style={{ position: 'relative', marginBottom: 24, width: '100%' }}>
-          <div style={{ fontSize: 14, lineHeight: 1.8 }}>
-            <div><b>작성일자:</b> {today.toISOString().slice(0, 10).replace(/-(\d{2})-(\d{2})$/, '년 $1월 $2일')}</div>
+      <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative', borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+        {/* 상단 정보 + 직인 */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', marginBottom: 16 }}>
+          <div style={{ flex: 1, fontSize: 15, lineHeight: 1.7 }}>
+            <div><b>작성일자:</b> {docDateStr}</div>
             <div><b>문서번호:</b> {docNumber}</div>
             <div><b>상호:</b> (주)튜링</div>
-            <div style={{ display: 'inline-block', position: 'relative', verticalAlign: 'top', minHeight: 100 }}>
-              <span style={{ position: 'relative', display: 'inline-block' }}>
-                <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
-                <img 
-                  src="/stamp.png" 
-                  alt="직인" 
-                  style={{ 
-                    position: 'absolute', 
-                    right: '-10px', 
-                    bottom: '-10px', 
-                    width: '80px', 
-                    height: '80px', 
-                    objectFit: 'contain', 
-                    pointerEvents: 'none', 
-                    opacity: 0.6, 
-                    background: 'transparent',
-                    zIndex: 20,
-                    border: 'none',
-                    overflow: 'visible',
-                  }} 
-                />
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span><b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)</span>
+              <img src="/stamp.png" alt="직인" style={{ marginLeft: 16, width: 80, height: 80, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 10 }} />
             </div>
             <div><b>전화:</b> 070-4281-4869</div>
             <div><b>사업자등록번호:</b> 254-87-01382</div>
           </div>
         </div>
-        {/* 견적 표 */}
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16 }}>
+        {/* 수신 정보 */}
+        <div style={{ fontSize: 16, marginBottom: 8 }}><b>수신:</b> {data.recipient} 귀하</div>
+        {/* 안내문구 */}
+        <div style={{ fontSize: 16, marginBottom: 16 }}>
+          귀사의 무궁한 발전을 기원합니다.<br />
+          아래와 같이 견적드리오니 검토 부탁드립니다.
+        </div>
+        {/* 표 */}
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16, background: '#fff' }}>
           <thead>
             <tr style={{ background: '#f0f4f8' }}>
-              <th style={{ border: '1px solid #bbb', padding: 8, width: 120 }}>구분</th>
-              <th style={{ border: '1px solid #bbb', padding: 8 }}>내용</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, width: 120, textAlign: 'center' }}>구분</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>내용</th>
             </tr>
           </thead>
           <tbody>
             <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.schoolName}</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>항목명</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.itemName}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.itemName}</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>플랜 유형</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.planType}</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>1인당 월 단가</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'right' }}>{data.unitPrice.toLocaleString()}원</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>인원</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.headcount}명</td></tr>
