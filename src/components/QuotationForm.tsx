@@ -39,13 +39,15 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공'
   );
 
-  // 서비스 기간 계산
+  // 서비스 기간 계산 (30일 = 1개월)
   const calculateServicePeriod = () => {
     const start = new Date(serviceStart);
     const end = new Date(serviceEnd);
-    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-    const days = end.getDate() - start.getDate();
-    return { months, days };
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const months = Math.floor(diffDays / 30);
+    const days = diffDays % 30;
+    return { months, days, totalDays: diffDays };
   };
 
   // 서비스 기간 업데이트
@@ -68,7 +70,9 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   // 총 금액 계산 (부가세 포함)
   const calculateTotalAmount = () => {
     if (!headcount) return 0;
-    const subtotal = unitPrice * headcount * serviceMonths;
+    const { totalDays } = calculateServicePeriod();
+    const months = Math.ceil(totalDays / 30);
+    const subtotal = unitPrice * headcount * months;
     const totalDiscount = discounts.reduce((sum, d) => {
       if (d.type === 'percentage') {
         return sum + (subtotal * (d.amount / 100));
@@ -133,18 +137,19 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div>
         <label>서비스 기간:<br />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="date" value={serviceStart} onChange={e => updateServicePeriod(e.target.value, serviceEnd)} required />
-            <span>~</span>
-            <input type="date" value={serviceEnd} onChange={e => updateServicePeriod(serviceStart, e.target.value)} required />
-            <span style={{ marginLeft: '8px' }}>또는</span>
             <input 
-              type="number" 
-              value={serviceMonths} 
-              onChange={e => updateServicePeriodByMonths(Number(e.target.value))} 
-              min="1"
-              style={{ width: '80px' }}
+              type="date" 
+              value={serviceStart} 
+              onChange={e => setServiceStart(e.target.value)} 
+              required 
             />
-            <span>개월</span>
+            <span>~</span>
+            <input 
+              type="date" 
+              value={serviceEnd} 
+              onChange={e => setServiceEnd(e.target.value)} 
+              required 
+            />
           </div>
           <div style={{ marginTop: '4px', color: '#666', fontSize: '0.9em' }}>
             {(() => {
@@ -157,7 +162,13 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div>
         <label>1인당 월 단가:<br />
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
-            <input type="number" value={unitPrice} onChange={e => setUnitPrice(Number(e.target.value))} required style={{ textAlign: 'right' }} />
+            <input 
+              type="text" 
+              value={unitPrice.toLocaleString()} 
+              onChange={e => setUnitPrice(Number(e.target.value.replace(/,/g, '')))} 
+              required 
+              style={{ textAlign: 'right' }} 
+            />
             <span>원</span>
           </div>
         </label>
