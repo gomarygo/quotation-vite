@@ -385,6 +385,13 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
                   fontSize: '16px',
                   minWidth: '200px'
                 }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (!discountLabel || !discountAmount) return;
+                    handleAddDiscount();
+                  }
+                }}
               />
               <span style={{ 
                 whiteSpace: 'nowrap', 
