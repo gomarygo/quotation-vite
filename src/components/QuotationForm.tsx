@@ -71,8 +71,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   // 총 금액 계산 (부가세 포함)
   const calculateTotalAmount = () => {
     if (!headcount) return 0;
-    const { totalDays } = calculateServicePeriod();
-    const months = Math.ceil(totalDays / 30);
+    const { months } = calculateServicePeriod();
     return unitPrice * headcount * months;
   };
 
