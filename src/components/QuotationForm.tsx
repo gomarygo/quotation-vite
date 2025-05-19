@@ -40,6 +40,16 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공'
   );
 
+  const handleSchoolNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSchoolName = e.target.value;
+    setSchoolName(newSchoolName);
+    setRecipient(newSchoolName ? `${newSchoolName} 행정실` : '');
+  };
+
+  const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRecipient(e.target.value);
+  };
+
   // 서비스 기간 계산 (30일 = 1개월)
   const calculateServicePeriod = () => {
     const start = new Date(serviceStart);
@@ -189,7 +199,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           <label style={{ display: 'block', marginBottom: '8px' }}>학교명:<br />
             <input 
               value={schoolName} 
-              onChange={e => setSchoolName(e.target.value)} 
+              onChange={handleSchoolNameChange} 
               required 
               style={{ width: '100%', padding: '8px' }}
             />
@@ -199,7 +209,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           <label style={{ display: 'block', marginBottom: '8px' }}>수신자:<br />
             <input 
               value={recipient} 
-              onChange={e => setRecipient(e.target.value)} 
+              onChange={handleRecipientChange}
               required 
               style={{ width: '100%', padding: '8px' }}
             />
