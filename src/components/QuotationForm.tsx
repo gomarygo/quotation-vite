@@ -186,8 +186,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
     return result + '원';
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onSubmit({
       schoolName,
       recipient,
@@ -203,7 +202,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ 
+    <form style={{ 
       background: '#fff', 
       padding: '32px', 
       borderRadius: '8px', 
@@ -492,7 +491,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
       </div>
 
       <button 
-        type="submit" 
+        type="button"
+        onClick={handleSubmit}
         style={{ 
           marginTop: '32px', 
           width: '100%',
