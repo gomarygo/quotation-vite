@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 interface DiscountItem {
   label: string;
@@ -8,37 +8,55 @@ interface DiscountItem {
 
 interface QuotationFormProps {
   onSubmit: (data: any) => void;
+  initialData?: any;
 }
 
 const planTypes = ['기본형', '환급형'];
 const discountTypes = ['첫 도입 할인', '재계약 할인', '특별 할인', '장기 계약 할인'];
 
-const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
-  const [schoolName, setSchoolName] = useState('');
-  const [recipient, setRecipient] = useState('');
-  const [itemName, setItemName] = useState('수학대왕 AI코스웨어 이용권');
-  const [planType, setPlanType] = useState(planTypes[0]);
-  const [headcount, setHeadcount] = useState<number | ''>('');
-  const [serviceStart, setServiceStart] = useState(() => {
+const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) => {
+  const [schoolName, setSchoolName] = useState(initialData?.schoolName ?? '');
+  const [recipient, setRecipient] = useState(initialData?.recipient ?? '');
+  const [itemName, setItemName] = useState(initialData?.itemName ?? '수학대왕 AI코스웨어 이용권');
+  const [planType, setPlanType] = useState(initialData?.planType ?? planTypes[0]);
+  const [headcount, setHeadcount] = useState<number | ''>(initialData?.headcount ?? '');
+  const [serviceStart, setServiceStart] = useState(initialData?.serviceStart ?? (() => {
     const today = new Date();
     const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
     return koreaTime.toISOString().split('T')[0];
-  });
-  const [serviceEnd, setServiceEnd] = useState(() => {
+  })());
+  const [serviceEnd, setServiceEnd] = useState(initialData?.serviceEnd ?? (() => {
     const koreaTime = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
     const lastDay = new Date(2025, 11, 31);
     lastDay.setHours(23, 59, 59, 999);
     return lastDay.toISOString().split('T')[0];
-  });
-  const [serviceMonths, setServiceMonths] = useState(3);
-  const [unitPrice, setUnitPrice] = useState(9900);
-  const [discounts, setDiscounts] = useState<DiscountItem[]>([]);
+  })());
+  const [serviceMonths, setServiceMonths] = useState(initialData?.serviceMonths ?? 3);
+  const [unitPrice, setUnitPrice] = useState(initialData?.unitPrice ?? 9900);
+  const [discounts, setDiscounts] = useState<DiscountItem[]>(initialData?.discounts ?? []);
   const [discountLabel, setDiscountLabel] = useState('');
   const [discountAmount, setDiscountAmount] = useState<number | ''>('');
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('fixed');
-  const [note, setNote] = useState(
-    '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공'
-  );
+  const [note, setNote] = useState(initialData?.note ?? '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공');
+
+  const schoolNameRef = useRef<HTMLInputElement>(null);
+  const recipientRef = useRef<HTMLInputElement>(null);
+  const itemNameRef = useRef<HTMLInputElement>(null);
+  const planTypeRef = useRef<HTMLSelectElement>(null);
+  const headcountRef = useRef<HTMLInputElement>(null);
+  const serviceStartRef = useRef<HTMLInputElement>(null);
+  const serviceEndRef = useRef<HTMLInputElement>(null);
+  const unitPriceRef = useRef<HTMLInputElement>(null);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<any>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextRef && nextRef.current) {
+        nextRef.current.focus();
+      }
+    }
+  };
 
   const handleSchoolNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSchoolName = e.target.value;
@@ -198,39 +216,47 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>학교명:<br />
             <input 
+              ref={schoolNameRef}
               value={schoolName} 
               onChange={handleSchoolNameChange} 
               required 
               style={{ width: '100%', padding: '8px' }}
+              onKeyDown={e => handleKeyDown(e, recipientRef)}
             />
           </label>
         </div>
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>수신자:<br />
             <input 
+              ref={recipientRef}
               value={recipient} 
               onChange={handleRecipientChange}
               required 
               style={{ width: '100%', padding: '8px' }}
+              onKeyDown={e => handleKeyDown(e, itemNameRef)}
             />
           </label>
         </div>
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>항목명:<br />
             <input 
+              ref={itemNameRef}
               value={itemName} 
               onChange={e => setItemName(e.target.value)} 
               required 
               style={{ width: '100%', padding: '8px' }}
+              onKeyDown={e => handleKeyDown(e, planTypeRef)}
             />
           </label>
         </div>
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>플랜 유형:<br />
             <select 
+              ref={planTypeRef}
               value={planType} 
               onChange={e => setPlanType(e.target.value)}
               style={{ width: '100%', padding: '8px' }}
+              onKeyDown={e => handleKeyDown(e, headcountRef)}
             >
               {planTypes.map(type => <option key={type}>{type}</option>)}
             </select>
@@ -239,11 +265,13 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>인원수:<br />
             <input 
+              ref={headcountRef}
               type="number" 
               value={headcount} 
               onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} 
               required 
               style={{ width: '100%', padding: '8px' }}
+              onKeyDown={e => handleKeyDown(e, serviceStartRef)}
             />
           </label>
         </div>
@@ -260,19 +288,23 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
               <input 
+                ref={serviceStartRef}
                 type="date" 
                 value={serviceStart} 
                 onChange={e => setServiceStart(e.target.value)} 
                 required 
                 style={{ flex: 1, padding: '8px' }}
+                onKeyDown={e => handleKeyDown(e, serviceEndRef)}
               />
               <span>~</span>
               <input 
+                ref={serviceEndRef}
                 type="date" 
                 value={serviceEnd} 
                 onChange={e => setServiceEnd(e.target.value)} 
                 required 
                 style={{ flex: 1, padding: '8px' }}
+                onKeyDown={e => handleKeyDown(e, unitPriceRef)}
               />
             </div>
           </label>
@@ -281,11 +313,13 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           <label style={{ display: 'block', marginBottom: '8px' }}>1인당 월 단가:<br />
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
               <input 
+                ref={unitPriceRef}
                 type="text" 
                 value={unitPrice.toLocaleString()} 
                 onChange={e => setUnitPrice(Number(e.target.value.replace(/,/g, '')))} 
                 required 
                 style={{ width: '100%', textAlign: 'right', padding: '8px' }} 
+                onKeyDown={e => handleKeyDown(e, noteRef)}
               />
               <span>원</span>
             </div>
@@ -443,6 +477,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div style={{ marginTop: '32px' }}>
         <label style={{ display: 'block', marginBottom: '8px' }}>비고:<br />
           <textarea 
+            ref={noteRef}
             value={note} 
             onChange={e => setNote(e.target.value)} 
             rows={4} 
@@ -451,6 +486,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
               padding: '8px',
               resize: 'vertical'
             }} 
+            onKeyDown={e => {/* 마지막 필드이므로 엔터 시 제출 허용 */}}
           />
         </label>
       </div>
