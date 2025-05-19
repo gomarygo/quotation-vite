@@ -85,7 +85,11 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           아래와 같이 견적드리오니 검토 부탁드립니다.
         </div>
         {/* 표 */}
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16, background: '#fff' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16, background: '#fff', tableLayout: 'fixed' }}>
+          <colgroup>
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '70%' }} />
+          </colgroup>
           <thead>
             <tr style={{ background: '#f0f4f8' }}>
               <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center' }}>구분</th>
