@@ -221,7 +221,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, recipientRef)}
-              placeholder="예) 서울중학교"
+              lang="ko"
+              inputMode="text"
             />
           </label>
         </div>
@@ -234,7 +235,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, itemNameRef)}
-              placeholder="예) 서울중학교 행정실"
+              lang="ko"
+              inputMode="text"
             />
           </label>
         </div>
@@ -279,7 +281,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
                   if (serviceStartRef.current) serviceStartRef.current.focus();
                 }
               }}
-              placeholder="예) 50"
+              lang="ko"
+              inputMode="text"
             />
           </label>
         </div>
