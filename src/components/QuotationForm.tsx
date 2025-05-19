@@ -29,6 +29,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     const lastDay = new Date(today.getFullYear(), 11, 31);
     return lastDay.toISOString().split('T')[0];
   });
+  const [serviceMonths, setServiceMonths] = useState(3);
   const [unitPrice, setUnitPrice] = useState(9900);
   const [discounts, setDiscounts] = useState<DiscountItem[]>([]);
   const [discountLabel, setDiscountLabel] = useState('');
@@ -39,17 +40,35 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   );
 
   // 서비스 기간 계산
-  const months = (() => {
-    if (!headcount) return 0;
+  const calculateServicePeriod = () => {
     const start = new Date(serviceStart);
     const end = new Date(serviceEnd);
-    return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
-  })();
+    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    const days = end.getDate() - start.getDate();
+    return { months, days };
+  };
+
+  // 서비스 기간 업데이트
+  const updateServicePeriod = (start: string, end: string) => {
+    setServiceStart(start);
+    setServiceEnd(end);
+    const { months } = calculateServicePeriod();
+    setServiceMonths(months);
+  };
+
+  // 개월 수로 서비스 기간 업데이트
+  const updateServicePeriodByMonths = (months: number) => {
+    const start = new Date(serviceStart);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + months);
+    setServiceEnd(end.toISOString().split('T')[0]);
+    setServiceMonths(months);
+  };
 
   // 총 금액 계산 (부가세 포함)
   const calculateTotalAmount = () => {
     if (!headcount) return 0;
-    const subtotal = unitPrice * headcount * months;
+    const subtotal = unitPrice * headcount * serviceMonths;
     const totalDiscount = discounts.reduce((sum, d) => {
       if (d.type === 'percentage') {
         return sum + (subtotal * (d.amount / 100));
@@ -114,10 +133,24 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div>
         <label>서비스 기간:<br />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="date" value={serviceStart} onChange={e => setServiceStart(e.target.value)} required />
+            <input type="date" value={serviceStart} onChange={e => updateServicePeriod(e.target.value, serviceEnd)} required />
             <span>~</span>
-            <input type="date" value={serviceEnd} onChange={e => setServiceEnd(e.target.value)} required />
-            <span style={{ marginLeft: '8px' }}>({months}개월)</span>
+            <input type="date" value={serviceEnd} onChange={e => updateServicePeriod(serviceStart, e.target.value)} required />
+            <span style={{ marginLeft: '8px' }}>또는</span>
+            <input 
+              type="number" 
+              value={serviceMonths} 
+              onChange={e => updateServicePeriodByMonths(Number(e.target.value))} 
+              min="1"
+              style={{ width: '80px' }}
+            />
+            <span>개월</span>
+          </div>
+          <div style={{ marginTop: '4px', color: '#666', fontSize: '0.9em' }}>
+            {(() => {
+              const { months, days } = calculateServicePeriod();
+              return `${months}개월 ${days}일`;
+            })()}
           </div>
         </label>
       </div>
