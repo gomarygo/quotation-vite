@@ -50,37 +50,65 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data }) => {
 
   return (
     <div style={{ marginTop: 32 }}>
-      <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: 24 }}>견적서</h2>
-        <div style={{ marginBottom: 16 }}>
-          <b>작성일자:</b> {new Date().toISOString().slice(0, 10).replace(/-/g, '년 ').replace(/-(\d{2})$/, '월 $1일')}<br />
-          <b>수신:</b> {data.recipient} 귀하<br />
-          <b>학교명:</b> {data.schoolName}
+      <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative' }}>
+        {/* 상단 회사 정보 및 직인 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>작성일자:</b> {new Date().toISOString().slice(0, 10).replace(/-(\d{2})-(\d{2})$/, '년 $1월 $2일')}</div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>문서번호:</b> 20250515-844</div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>상호:</b> (주)튜링</div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)</div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>전화:</b> 070-4281-4869</div>
+            <div style={{ fontSize: 14, marginBottom: 4 }}><b>사업자등록번호:</b> 254-87-01382</div>
+          </div>
+          <img src="/stamp.png" alt="직인" style={{ width: 100, height: 100, objectFit: 'contain', marginLeft: 24 }} />
         </div>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16 }} border={1}>
+        {/* 제목 */}
+        <h2 style={{ textAlign: 'center', margin: '32px 0 24px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
+        {/* 수신자 및 안내문구 */}
+        <div style={{ marginBottom: 16, fontSize: 16 }}>
+          <b>수신:</b> {data.recipient} 귀하<br />
+          귀사의 무궁한 발전을 기원합니다.<br />
+          아래와 같이 견적드리오니 검토 부탁드립니다.
+        </div>
+        {/* 견적 표 */}
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16 }}>
+          <thead>
+            <tr style={{ background: '#f0f4f8' }}>
+              <th style={{ border: '1px solid #bbb', padding: 8, width: 120 }}>구분</th>
+              <th style={{ border: '1px solid #bbb', padding: 8 }}>내용</th>
+            </tr>
+          </thead>
           <tbody>
-            <tr><th>항목명</th><td>{data.itemName}</td></tr>
-            <tr><th>플랜 유형</th><td>{data.planType}</td></tr>
-            <tr><th>1인당 월 단가</th><td>{data.unitPrice.toLocaleString()}원</td></tr>
-            <tr><th>인원수</th><td>{data.headcount}명</td></tr>
-            <tr><th>계약기간</th><td>{months}개월 ({data.serviceStart}~{data.serviceEnd})</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.schoolName}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>항목명</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.itemName}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>플랜 유형</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.planType}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>1인당 월 단가</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'right' }}>{data.unitPrice.toLocaleString()}원</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>인원</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{data.headcount}명</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8 }}>{months}개월 ({data.serviceStart}~{data.serviceEnd})</td></tr>
             {data.discounts.map((d, i) => (
-              <tr key={i}><th>{d.label}</th><td style={{ color: 'red' }}>-{d.amount.toLocaleString()}원</td></tr>
+              <tr key={i}><td style={{ border: '1px solid #bbb', padding: 8 }}>{d.label}</td><td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'right' }}>-{d.amount.toLocaleString()}원</td></tr>
             ))}
-            <tr><th>공급가액</th><td>{supplyAmount.toLocaleString()}원</td></tr>
-            <tr><th>부가세</th><td>{vat.toLocaleString()}원</td></tr>
-            <tr><th>총 금액</th><td><b>{total.toLocaleString()}원</b></td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>공급가액</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'right' }}>{supplyAmount.toLocaleString()}원</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8 }}>부가세</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'right' }}>{vat.toLocaleString()}원</td></tr>
+            <tr style={{ background: '#e8f0fe' }}><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700 }}>총 금액</td><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'right', color: '#1a73e8' }}>{total.toLocaleString()}원</td></tr>
           </tbody>
         </table>
+        {/* 비고 */}
         <div style={{ marginBottom: 16 }}>
           <b>비고:</b><br />
-          <pre style={{ fontFamily: 'inherit', background: '#f8f8f8', padding: 8 }}>{data.note}</pre>
+          <pre style={{ fontFamily: 'inherit', background: '#f8f8f8', padding: 8, fontSize: 15 }}>{data.note}</pre>
         </div>
-        <div style={{ fontSize: 14, color: '#555' }}>
+        {/* 입금 계좌 안내 */}
+        <div style={{ fontSize: 15, color: '#222', marginBottom: 8, background: '#f8f8f8', padding: 12, borderRadius: 6 }}>
           <b>입금 계좌 안내</b><br />
           - 은행명: 국민은행<br />
           - 계좌번호: 810137-04-015409<br />
           - 예금주: (주)튜링
+        </div>
+        <div style={{ fontSize: 13, color: '#555', marginTop: 8 }}>
+          본 견적서의 유효기간은 작성일로부터 30일입니다.<br />
+          상기 금액은 부가가치세가 포함된 금액입니다.
         </div>
       </div>
       <button onClick={handleDownloadPdf} style={{ margin: '24px auto', display: 'block' }}>PDF로 저장</button>
