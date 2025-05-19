@@ -34,7 +34,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [unitPrice, setUnitPrice] = useState(9900);
   const [discounts, setDiscounts] = useState<DiscountItem[]>([]);
   const [discountLabel, setDiscountLabel] = useState('');
-  const [discountAmount, setDiscountAmount] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState<number | ''>('');
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('fixed');
   const [note, setNote] = useState(
     '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공'
@@ -112,6 +112,16 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
 
   const handleRemoveDiscount = (idx: number) => {
     setDiscounts(discounts.filter((_, i) => i !== idx));
+  };
+
+  const handleDiscountAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/,/g, '');
+    setDiscountAmount(value === '' ? '' : Number(value));
+  };
+
+  const formatNumber = (value: number | '') => {
+    if (value === '') return '';
+    return value.toLocaleString();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -283,10 +293,10 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <input 
-                type="number" 
+                type="text" 
                 placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
-                value={discountAmount || ''} 
-                onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
+                value={formatNumber(discountAmount)} 
+                onChange={handleDiscountAmountChange}
                 style={{ 
                   flex: 1, 
                   padding: '8px',
@@ -357,13 +367,18 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
                 value={calculateFinalAmount().toLocaleString()} 
                 readOnly 
                 style={{ 
-                  backgroundColor: '#f5f5f5', 
+                  backgroundColor: '#e8f0fe', 
                   textAlign: 'right',
                   padding: '8px',
-                  width: '300px'
+                  width: '300px',
+                  border: '1px solid #1a73e8',
+                  borderRadius: '4px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  color: '#1a73e8'
                 }}
               />
-              <span>원</span>
+              <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1a73e8' }}>원</span>
             </div>
           </div>
         )}
