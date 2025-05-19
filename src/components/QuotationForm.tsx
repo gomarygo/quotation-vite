@@ -202,7 +202,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
   };
 
   return (
-    <form style={{ 
+    <form onSubmit={e => e.preventDefault()} style={{ 
       background: '#fff', 
       padding: '32px', 
       borderRadius: '8px', 
