@@ -56,18 +56,18 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   const months = monthsAndDays.months;
   const days = monthsAndDays.days;
   const totalMonths = months;
-  const subtotal = data.unitPrice * data.headcount * totalMonths;
-  const calculateDiscountAmount = (discount: any, totalAmount: number) => {
+  // 총 금액 = 인원 * 개월 * 1인당월단가
+  const totalAmount = data.unitPrice * data.headcount * totalMonths;
+  const calculateDiscountAmount = (discount: DiscountItem, totalAmount: number) => {
     if (discount.type === 'percentage') {
       return Math.round(totalAmount * (discount.amount / 100));
     }
     return discount.amount;
   };
-  const totalDiscount = data.discounts.reduce((sum, d) => sum + calculateDiscountAmount(d, subtotal), 0);
-  const supplyAmount = subtotal - totalDiscount;
-  const vat = Math.round(supplyAmount * 0.1);
-  const total = supplyAmount + vat;
-  const finalAmount = total - totalDiscount;
+  // 할인 합계
+  const totalDiscount = data.discounts.reduce((sum, d) => sum + calculateDiscountAmount(d, totalAmount), 0);
+  // 최종 견적가 = 총 금액 - 할인 합계
+  const finalAmount = totalAmount - totalDiscount;
 
   // 한글 금액 변환 함수
   const convertToKoreanNumber = (num: number): string => {
@@ -114,7 +114,14 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
     const contentWidth = pdfWidth - (margin * 2);
     const contentHeight = (canvas.height * contentWidth) / canvas.width;
     pdf.addImage(imgData, 'PNG', margin, margin, contentWidth, contentHeight);
-    pdf.save('견적서.pdf');
+    // 파일명: 작성일자 학교명 견적서.pdf (작성일자는 yymmdd 형식)
+    const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+    const yy = String(koreaNow.getUTCFullYear()).slice(2, 4);
+    const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
+    const yymmdd = `${yy}${mm}${dd}`;
+    const cleanSchoolName = data.schoolName.replace(/[^가-힣a-zA-Z0-9]/g, '');
+    pdf.save(`${yymmdd} ${cleanSchoolName} 견적서.pdf`);
   };
 
   return (
@@ -126,21 +133,17 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
-          <div><b>상호:</b> (주)튜링</div>
-          <div><b>대표:</b> 최민규</div>
+          <div><b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규</div>
           <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div style={{ position: 'relative' }}>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 160, top: -60, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 290, top: 10, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
           <div style={{ position: 'relative' }}>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
           </div>
           <div style={{ position: 'relative' }}>
-            <b>전화:</b> 070-4281-4869
-          </div>
-          <div style={{ position: 'relative' }}>
-            <b>메일:</b> tax@teamturing.com
+            <b>전화:</b> 070-4281-4869 <b style={{ margin: '0 8px' }}>|</b> <b>메일:</b> tax@teamturing.com
           </div>
         </div>
         {/* 수신 정보 */}
@@ -165,15 +168,20 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           <tbody>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.schoolName}</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.itemName} ({data.planType})</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>1인당 월 단가</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.unitPrice.toLocaleString()}원</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>인원</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.headcount}명</td></tr>
+            <tr>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>1인당 월 단가 / 인원</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
+            </tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>총 금액</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{total.toLocaleString()}원</td></tr>
+            <tr>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550 }}>총 금액</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550 }}>{totalAmount.toLocaleString()}원</td>
+            </tr>
             {data.discounts.length > 0 && data.discounts.map((d, i) => (
               <tr key={i}>
                 <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red' }}>{d.label}</td>
                 <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center' }}>
-                  -{calculateDiscountAmount(d, subtotal).toLocaleString()}원
+                  -{calculateDiscountAmount(d, totalAmount).toLocaleString()}원
                   {d.type === 'percentage' && ` (${d.amount}% 할인)`}
                 </td>
               </tr>
