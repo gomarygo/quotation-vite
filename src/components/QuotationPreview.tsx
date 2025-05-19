@@ -72,27 +72,24 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             <div><b>문서번호:</b> {docNumber}</div>
             <div><b>상호:</b> (주)튜링</div>
             <div style={{ display: 'inline-block', position: 'relative', verticalAlign: 'top', minHeight: 100 }}>
-              <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
               <span style={{ position: 'relative', display: 'inline-block' }}>
+                <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
                 <img 
                   src="/stamp.png" 
                   alt="직인" 
                   style={{ 
                     position: 'absolute', 
-                    left: '100%', 
-                    top: '-30px', 
+                    right: '-10px', 
+                    bottom: '-10px', 
                     width: '80px', 
                     height: '80px', 
-                    objectFit: 'none', 
+                    objectFit: 'contain', 
                     pointerEvents: 'none', 
-                    opacity: 0.7, 
+                    opacity: 0.6, 
                     background: 'transparent',
-                    zIndex: 10,
+                    zIndex: 20,
                     border: 'none',
                     overflow: 'visible',
-                    boxShadow: 'none',
-                    maxWidth: 'none',
-                    maxHeight: 'none',
                   }} 
                 />
               </span>
