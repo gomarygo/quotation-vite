@@ -64,7 +64,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   };
   const totalDiscount = data.discounts.reduce((sum, d) => sum + calculateDiscountAmount(d, subtotal), 0);
   const supplyAmount = subtotal - totalDiscount;
-  const vat = Math.round(supplyAmount / 11);
+  const vat = Math.round(supplyAmount * 0.1);
   const total = supplyAmount + vat;
   const finalAmount = total;
 
@@ -130,13 +130,16 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div style={{ position: 'relative' }}>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', left: 0, top: -60, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 0, top: -60, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
           <div style={{ position: 'relative' }}>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
           </div>
           <div style={{ position: 'relative' }}>
             <b>전화:</b> 070-4281-4869
+          </div>
+          <div style={{ position: 'relative' }}>
+            <b>메일:</b> tax@teamturing.com
           </div>
         </div>
         {/* 수신 정보 */}
@@ -166,7 +169,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>공급가액</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{supplyAmount.toLocaleString()}원</td></tr>
             <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>부가세</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{(supplyAmount * 0.1).toLocaleString()}원</td></tr>
-            <tr style={{ background: '#e8f0fe' }}><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, textAlign: 'center' }}>총 금액</td><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#1a73e8' }}>{(supplyAmount * 1.1).toLocaleString()}원</td></tr>
+            <tr style={{ background: '#e8f0fe' }}><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, textAlign: 'center' }}>총 금액</td><td style={{ border: '1px solid #1a73e8', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#1a73e8' }}>{total.toLocaleString()}원</td></tr>
             {data.discounts.length > 0 && data.discounts.map((d, i) => (
               <tr key={i}><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red' }}>{d.label}</td><td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center' }}>-{calculateDiscountAmount(d, subtotal).toLocaleString()}원</td></tr>
             ))}
@@ -174,8 +177,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
               <tr style={{ background: '#f8f8f8' }}>
                 <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center' }}>최종 견적가</td>
                 <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#1a73e8' }}>
-                  {(supplyAmount * 1.1 - totalDiscount).toLocaleString()}원
-                  <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(supplyAmount * 1.1 - totalDiscount))})</span>
+                  {finalAmount.toLocaleString()}원
+                  <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(finalAmount))})</span>
                 </td>
               </tr>
             )}
