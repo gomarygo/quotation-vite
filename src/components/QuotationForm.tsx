@@ -21,11 +21,13 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [headcount, setHeadcount] = useState<number | ''>('');
   const [serviceStart, setServiceStart] = useState(() => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
+    return koreaTime.toISOString().split('T')[0];
   });
   const [serviceEnd, setServiceEnd] = useState(() => {
     const today = new Date();
-    const lastDay = new Date(today.getFullYear(), 11, 31);
+    const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
+    const lastDay = new Date(koreaTime.getFullYear(), 11, 31);
     return lastDay.toISOString().split('T')[0];
   });
   const [serviceMonths, setServiceMonths] = useState(3);
@@ -190,49 +192,68 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       </div>
       <div>
         <label>할인 항목:<br /></label>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <select 
-            value={discountLabel} 
-            onChange={e => setDiscountLabel(e.target.value)}
-            style={{ flex: 1 }}
-          >
-            <option value="">할인 유형 선택</option>
-            {discountTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-          <select 
-            value={discountType} 
-            onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
-            style={{ width: '100px' }}
-          >
-            <option value="fixed">금액 할인</option>
-            <option value="percentage">% 할인</option>
-          </select>
-          <input 
-            type="number" 
-            placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
-            value={discountAmount || ''} 
-            onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
-            style={{ width: '120px' }}
-          />
-          <button 
-            type="button" 
-            onClick={handleAddDiscount}
-            disabled={!discountLabel || !discountAmount}
-            style={{ 
-              backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
-              cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer'
-            }}
-          >
-            추가
-          </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <select 
+              value={discountLabel} 
+              onChange={e => setDiscountLabel(e.target.value)}
+              style={{ flex: 1 }}
+            >
+              <option value="">할인 유형 선택</option>
+              {discountTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+            <select 
+              value={discountType} 
+              onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
+              style={{ width: '100px' }}
+            >
+              <option value="fixed">금액 할인</option>
+              <option value="percentage">% 할인</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input 
+              type="number" 
+              placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
+              value={discountAmount || ''} 
+              onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
+              style={{ flex: 1 }}
+            />
+            <button 
+              type="button" 
+              onClick={handleAddDiscount}
+              disabled={!discountLabel || !discountAmount}
+              style={{ 
+                backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
+                cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer',
+                padding: '4px 16px'
+              }}
+            >
+              추가
+            </button>
+          </div>
         </div>
-        <ul>
+        <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
           {discounts.map((d, i) => (
-            <li key={i}>
+            <li key={i} style={{ marginBottom: '4px' }}>
               {d.label}: {d.type === 'percentage' ? `${d.amount}%` : `${d.amount.toLocaleString()}원`} 
-              <button type="button" onClick={() => handleRemoveDiscount(i)}>삭제</button>
+              <button 
+                type="button" 
+                onClick={() => handleRemoveDiscount(i)}
+                style={{ 
+                  marginLeft: '8px',
+                  padding: '2px 8px',
+                  backgroundColor: '#ff4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                삭제
+              </button>
             </li>
           ))}
         </ul>
