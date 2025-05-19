@@ -20,9 +20,10 @@ interface QuotationPreviewProps {
     discounts: DiscountItem[];
     note: string;
   };
+  onBack?: () => void;
 }
 
-const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data }) => {
+const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => {
   const printRef = useRef<HTMLDivElement>(null);
 
   // 계산
@@ -111,7 +112,12 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data }) => {
           상기 금액은 부가가치세가 포함된 금액입니다.
         </div>
       </div>
-      <button onClick={handleDownloadPdf} style={{ margin: '24px auto', display: 'block' }}>PDF로 저장</button>
+      <button onClick={handleDownloadPdf} style={{ margin: '24px auto 0', display: 'block' }}>PDF로 저장</button>
+      {onBack && (
+        <button onClick={onBack} style={{ margin: '16px auto', display: 'block', background: '#eee', color: '#222', border: '1px solid #bbb', borderRadius: 4, padding: '10px 32px', fontSize: 16, fontWeight: 500, cursor: 'pointer' }}>
+          입력으로 돌아가기
+        </button>
+      )}
     </div>
   );
 };
