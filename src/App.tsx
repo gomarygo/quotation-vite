@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import QuotationForm from './components/QuotationForm';
 import QuotationPreview from './components/QuotationPreview';
 import './App.css';
