@@ -273,7 +273,12 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} 
               required 
               style={{ width: '100%', padding: '8px' }}
-              onKeyDown={e => handleKeyDown(e, serviceStartRef)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (serviceStartRef.current) serviceStartRef.current.focus();
+                }
+              }}
               placeholder="예) 50"
             />
           </label>
