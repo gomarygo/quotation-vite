@@ -68,9 +68,11 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           <div><b>작성일자:</b> {docDateStr}</div>
           <div><b>문서번호:</b> {docNumber}</div>
           <div><b>상호:</b> (주)튜링</div>
+          <div><b>대표:</b> 최민규</div>
+          <div><b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급</div>
           <div>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
-            <img src="/stamp.png" alt="직인" style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8, width: 60, height: 60, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 10, position: 'relative' }} />
+            <img src="/stamp.png" alt="직인" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 8, width: 60, height: 60, maxWidth: 60, maxHeight: 60, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 10, position: 'relative', boxShadow: 'none', overflow: 'visible' }} />
           </div>
           <div><b>전화:</b> 070-4281-4869</div>
           <div><b>사업자등록번호:</b> 254-87-01382</div>
