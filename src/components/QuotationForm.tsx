@@ -221,6 +221,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, recipientRef)}
+              placeholder="예) 서울중학교"
             />
           </label>
         </div>
@@ -233,6 +234,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, itemNameRef)}
+              placeholder="예) 서울중학교 행정실"
             />
           </label>
         </div>
@@ -245,6 +247,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, planTypeRef)}
+              placeholder="예) 수학대왕 AI코스웨어 이용권"
             />
           </label>
         </div>
@@ -271,6 +274,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               required 
               style={{ width: '100%', padding: '8px' }}
               onKeyDown={e => handleKeyDown(e, serviceStartRef)}
+              placeholder="예) 50"
             />
           </label>
         </div>
@@ -319,6 +323,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
                 required 
                 style={{ width: '100%', textAlign: 'right', padding: '8px' }} 
                 onKeyDown={e => handleKeyDown(e, noteRef)}
+                placeholder="예) 9,900"
               />
               <span>원</span>
             </div>
@@ -486,6 +491,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               resize: 'vertical'
             }} 
             onKeyDown={e => {/* 마지막 필드이므로 엔터 시 제출 허용 */}}
+            placeholder="예) 특이사항, 요청사항 등"
           />
         </label>
       </div>
