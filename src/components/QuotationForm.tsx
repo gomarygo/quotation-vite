@@ -113,90 +113,140 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 600, margin: '0 auto' }}>
-      <h2>학교 견적서 생성기</h2>
-      <div>
-        <label>학교명:<br /><input value={schoolName} onChange={e => setSchoolName(e.target.value)} required /></label>
-      </div>
-      <div>
-        <label>수신자:<br /><input value={recipient} onChange={e => setRecipient(e.target.value)} required /></label>
-      </div>
-      <div>
-        <label>항목명:<br /><input value={itemName} onChange={e => setItemName(e.target.value)} required /></label>
-      </div>
-      <div>
-        <label>플랜 유형:<br />
-          <select value={planType} onChange={e => setPlanType(e.target.value)}>
-            {planTypes.map(type => <option key={type}>{type}</option>)}
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>인원수:<br /><input type="number" value={headcount} onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} required /></label>
-      </div>
-      <div>
-        <label>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>서비스 기간:</span>
-            <span style={{ color: '#666', fontSize: '0.9em' }}>
-              {(() => {
-                const { months, days } = calculateServicePeriod();
-                return `${months}개월 ${days}일`;
-              })()}
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+    <form onSubmit={handleSubmit} style={{ 
+      background: '#fff', 
+      padding: '32px', 
+      borderRadius: '8px', 
+      maxWidth: '800px', 
+      margin: '0 auto',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+    }}>
+      <h2 style={{ marginBottom: '24px', fontSize: '24px' }}>학교 견적서 생성기</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>학교명:<br />
             <input 
-              type="date" 
-              value={serviceStart} 
-              onChange={e => setServiceStart(e.target.value)} 
+              value={schoolName} 
+              onChange={e => setSchoolName(e.target.value)} 
               required 
+              style={{ width: '100%', padding: '8px' }}
             />
-            <span>~</span>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>수신자:<br />
             <input 
-              type="date" 
-              value={serviceEnd} 
-              onChange={e => setServiceEnd(e.target.value)} 
+              value={recipient} 
+              onChange={e => setRecipient(e.target.value)} 
               required 
+              style={{ width: '100%', padding: '8px' }}
             />
-          </div>
-        </label>
-      </div>
-      <div>
-        <label>1인당 월 단가:<br />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>항목명:<br />
             <input 
-              type="text" 
-              value={unitPrice.toLocaleString()} 
-              onChange={e => setUnitPrice(Number(e.target.value.replace(/,/g, '')))} 
+              value={itemName} 
+              onChange={e => setItemName(e.target.value)} 
               required 
-              style={{ textAlign: 'right' }} 
+              style={{ width: '100%', padding: '8px' }}
             />
-            <span>원</span>
-          </div>
-        </label>
-      </div>
-      <div>
-        <label>총 금액 (부가세 포함):<br />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>플랜 유형:<br />
+            <select 
+              value={planType} 
+              onChange={e => setPlanType(e.target.value)}
+              style={{ width: '100%', padding: '8px' }}
+            >
+              {planTypes.map(type => <option key={type}>{type}</option>)}
+            </select>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>인원수:<br />
             <input 
-              type="text" 
-              value={calculateTotalAmount().toLocaleString()} 
-              readOnly 
-              style={{ backgroundColor: '#f5f5f5', textAlign: 'right' }}
+              type="number" 
+              value={headcount} 
+              onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} 
+              required 
+              style={{ width: '100%', padding: '8px' }}
             />
-            <span>원</span>
-          </div>
-        </label>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>서비스 기간:</span>
+              <span style={{ color: '#666', fontSize: '0.9em' }}>
+                {(() => {
+                  const { months, days } = calculateServicePeriod();
+                  return `${months}개월 ${days}일`;
+                })()}
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+              <input 
+                type="date" 
+                value={serviceStart} 
+                onChange={e => setServiceStart(e.target.value)} 
+                required 
+                style={{ flex: 1, padding: '8px' }}
+              />
+              <span>~</span>
+              <input 
+                type="date" 
+                value={serviceEnd} 
+                onChange={e => setServiceEnd(e.target.value)} 
+                required 
+                style={{ flex: 1, padding: '8px' }}
+              />
+            </div>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>1인당 월 단가:<br />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+              <input 
+                type="text" 
+                value={unitPrice.toLocaleString()} 
+                onChange={e => setUnitPrice(Number(e.target.value.replace(/,/g, '')))} 
+                required 
+                style={{ width: '100%', textAlign: 'right', padding: '8px' }} 
+              />
+              <span>원</span>
+            </div>
+          </label>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '8px' }}>총 금액 (부가세 포함):<br />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+              <input 
+                type="text" 
+                value={calculateTotalAmount().toLocaleString()} 
+                readOnly 
+                style={{ 
+                  width: '100%',
+                  backgroundColor: '#f5f5f5', 
+                  textAlign: 'right',
+                  padding: '8px'
+                }}
+              />
+              <span>원</span>
+            </div>
+          </label>
+        </div>
       </div>
-      <div>
-        <label>할인 항목:<br /></label>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+
+      <div style={{ marginTop: '32px' }}>
+        <label style={{ display: 'block', marginBottom: '16px', fontSize: '16px' }}>할인 항목:</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <select 
               value={discountLabel} 
               onChange={e => setDiscountLabel(e.target.value)}
-              style={{ flex: 1 }}
+              style={{ flex: 1, padding: '8px' }}
             >
               <option value="">할인 유형 선택</option>
               {discountTypes.map(type => (
@@ -206,14 +256,14 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
             <select 
               value={discountType} 
               onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
-              style={{ width: '120px' }}
+              style={{ width: '140px', padding: '8px' }}
             >
               <option value="fixed">금액 할인</option>
               <option value="percentage">% 할인</option>
             </select>
           </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <input 
                 type="number" 
                 placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
@@ -221,7 +271,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
                 onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
                 style={{ flex: 1, padding: '8px' }}
               />
-              <span style={{ whiteSpace: 'nowrap' }}>
+              <span style={{ whiteSpace: 'nowrap', minWidth: '40px' }}>
                 {discountType === 'percentage' ? '%' : '원'}
               </span>
             </div>
@@ -235,23 +285,23 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
                 padding: '8px 24px',
                 color: 'white',
                 border: 'none',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                minWidth: '100px'
               }}
             >
               추가
             </button>
           </div>
         </div>
-        <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+        <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
           {discounts.map((d, i) => (
-            <li key={i} style={{ marginBottom: '4px' }}>
-              {d.label}: {d.type === 'percentage' ? `${d.amount}%` : `${d.amount.toLocaleString()}원`} 
+            <li key={i} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ flex: 1 }}>{d.label}: {d.type === 'percentage' ? `${d.amount}%` : `${d.amount.toLocaleString()}원`}</span>
               <button 
                 type="button" 
                 onClick={() => handleRemoveDiscount(i)}
                 style={{ 
-                  marginLeft: '8px',
-                  padding: '2px 8px',
+                  padding: '4px 12px',
                   backgroundColor: '#ff4444',
                   color: 'white',
                   border: 'none',
@@ -265,30 +315,57 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           ))}
         </ul>
         {discounts.length > 0 && (
-          <div style={{ marginTop: '16px' }}>
-            <label>최종 견적가 (부가세 포함):<br />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
-                <input 
-                  type="text" 
-                  value={calculateTotalAmount().toLocaleString()} 
-                  readOnly 
-                  style={{ 
-                    backgroundColor: '#f5f5f5', 
-                    textAlign: 'right',
-                    padding: '8px',
-                    width: '200px'
-                  }}
-                />
-                <span>원</span>
-              </div>
-            </label>
+          <div style={{ marginTop: '24px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '16px' }}>최종 견적가 (부가세 포함):</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
+              <input 
+                type="text" 
+                value={calculateTotalAmount().toLocaleString()} 
+                readOnly 
+                style={{ 
+                  backgroundColor: '#f5f5f5', 
+                  textAlign: 'right',
+                  padding: '8px',
+                  width: '300px'
+                }}
+              />
+              <span>원</span>
+            </div>
           </div>
         )}
       </div>
-      <div>
-        <label>비고:<br /><textarea value={note} onChange={e => setNote(e.target.value)} rows={4} style={{ width: '100%' }} /></label>
+
+      <div style={{ marginTop: '32px' }}>
+        <label style={{ display: 'block', marginBottom: '8px' }}>비고:<br />
+          <textarea 
+            value={note} 
+            onChange={e => setNote(e.target.value)} 
+            rows={4} 
+            style={{ 
+              width: '100%', 
+              padding: '8px',
+              resize: 'vertical'
+            }} 
+          />
+        </label>
       </div>
-      <button type="submit" style={{ marginTop: 16, width: '100%' }}>견적서 미리보기</button>
+
+      <button 
+        type="submit" 
+        style={{ 
+          marginTop: '32px', 
+          width: '100%',
+          padding: '12px',
+          backgroundColor: '#1a73e8',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          fontSize: '16px',
+          cursor: 'pointer'
+        }}
+      >
+        견적서 미리보기
+      </button>
     </form>
   );
 };
