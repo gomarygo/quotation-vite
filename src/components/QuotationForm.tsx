@@ -25,9 +25,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     return koreaTime.toISOString().split('T')[0];
   });
   const [serviceEnd, setServiceEnd] = useState(() => {
-    const today = new Date();
-    const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
-    const lastDay = new Date(koreaTime.getFullYear(), 11, 31);
+    const koreaTime = new Date();
+    const lastDay = new Date(2025, 11, 31);
     return lastDay.toISOString().split('T')[0];
   });
   const [serviceMonths, setServiceMonths] = useState(3);
@@ -207,20 +206,25 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
             <select 
               value={discountType} 
               onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
-              style={{ width: '100px' }}
+              style={{ width: '120px' }}
             >
               <option value="fixed">금액 할인</option>
               <option value="percentage">% 할인</option>
             </select>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input 
-              type="number" 
-              placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
-              value={discountAmount || ''} 
-              onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
-              style={{ flex: 1 }}
-            />
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <input 
+                type="number" 
+                placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
+                value={discountAmount || ''} 
+                onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
+                style={{ flex: 1, padding: '8px' }}
+              />
+              <span style={{ whiteSpace: 'nowrap' }}>
+                {discountType === 'percentage' ? '%' : '원'}
+              </span>
+            </div>
             <button 
               type="button" 
               onClick={handleAddDiscount}
@@ -228,7 +232,10 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
               style={{ 
                 backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
                 cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer',
-                padding: '4px 16px'
+                padding: '8px 24px',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px'
               }}
             >
               추가
@@ -258,14 +265,19 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           ))}
         </ul>
         {discounts.length > 0 && (
-          <div>
-            <label>최종 금액 (부가세 포함):<br />
+          <div style={{ marginTop: '16px' }}>
+            <label>최종 견적가 (부가세 포함):<br />
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
                 <input 
                   type="text" 
                   value={calculateTotalAmount().toLocaleString()} 
                   readOnly 
-                  style={{ backgroundColor: '#f5f5f5', textAlign: 'right' }}
+                  style={{ 
+                    backgroundColor: '#f5f5f5', 
+                    textAlign: 'right',
+                    padding: '8px',
+                    width: '200px'
+                  }}
                 />
                 <span>원</span>
               </div>
