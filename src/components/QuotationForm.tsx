@@ -25,7 +25,6 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     return koreaTime.toISOString().split('T')[0];
   });
   const [serviceEnd, setServiceEnd] = useState(() => {
-    const koreaTime = new Date();
     const lastDay = new Date(2025, 11, 31);
     return lastDay.toISOString().split('T')[0];
   });
@@ -82,6 +81,20 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     const supplyAmount = subtotal - totalDiscount;
     const vat = Math.round(supplyAmount / 11);
     return supplyAmount + vat;
+  };
+
+  // 할인 금액 계산 (원 단위로 표시)
+  const calculateDiscountAmount = (discount: DiscountItem, subtotal: number) => {
+    if (discount.type === 'percentage') {
+      return Math.round(subtotal * (discount.amount / 100));
+    }
+    return discount.amount;
+  };
+
+  // 할인 목록 표시 형식
+  const formatDiscountDisplay = (discount: DiscountItem, subtotal: number) => {
+    const amount = calculateDiscountAmount(discount, subtotal);
+    return `${discount.label}: ${discount.type === 'percentage' ? `${discount.amount}% (${amount.toLocaleString()}원)` : `${amount.toLocaleString()}원`}`;
   };
 
   const handleAddDiscount = () => {
@@ -269,9 +282,18 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
                 placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
                 value={discountAmount || ''} 
                 onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
-                style={{ flex: 1, padding: '8px' }}
+                style={{ 
+                  flex: 1, 
+                  padding: '8px',
+                  fontSize: '16px',
+                  minWidth: '200px'
+                }}
               />
-              <span style={{ whiteSpace: 'nowrap', minWidth: '40px' }}>
+              <span style={{ 
+                whiteSpace: 'nowrap', 
+                minWidth: '40px',
+                fontSize: '16px'
+              }}>
                 {discountType === 'percentage' ? '%' : '원'}
               </span>
             </div>
@@ -286,7 +308,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                minWidth: '100px'
+                minWidth: '100px',
+                fontSize: '16px'
               }}
             >
               추가
@@ -294,25 +317,33 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
           </div>
         </div>
         <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
-          {discounts.map((d, i) => (
-            <li key={i} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ flex: 1 }}>{d.label}: {d.type === 'percentage' ? `${d.amount}%` : `${d.amount.toLocaleString()}원`}</span>
-              <button 
-                type="button" 
-                onClick={() => handleRemoveDiscount(i)}
-                style={{ 
-                  padding: '4px 12px',
-                  backgroundColor: '#ff4444',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
-              >
-                삭제
-              </button>
-            </li>
-          ))}
+          {discounts.map((d, i) => {
+            const { totalDays } = calculateServicePeriod();
+            const months = Math.ceil(totalDays / 30);
+            const subtotal = unitPrice * (headcount || 0) * months;
+            return (
+              <li key={i} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ flex: 1, fontSize: '16px' }}>
+                  {formatDiscountDisplay(d, subtotal)}
+                </span>
+                <button 
+                  type="button" 
+                  onClick={() => handleRemoveDiscount(i)}
+                  style={{ 
+                    padding: '4px 12px',
+                    backgroundColor: '#ff4444',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  삭제
+                </button>
+              </li>
+            );
+          })}
         </ul>
         {discounts.length > 0 && (
           <div style={{ marginTop: '24px' }}>
