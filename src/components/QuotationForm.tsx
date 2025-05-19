@@ -102,16 +102,6 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         </label>
       </div>
       <div>
-        <label>총 금액 (부가세 포함):<br />
-          <input 
-            type="text" 
-            value={calculateTotalAmount().toLocaleString()} 
-            readOnly 
-            style={{ backgroundColor: '#f5f5f5' }}
-          />원
-        </label>
-      </div>
-      <div>
         <label>인원수:<br /><input type="number" value={headcount} onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} required /></label>
       </div>
       <div>
@@ -121,7 +111,25 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         </label>
       </div>
       <div>
-        <label>1인당 월 단가:<br /><input type="number" value={unitPrice} onChange={e => setUnitPrice(Number(e.target.value))} required />원</label>
+        <label>1인당 월 단가:<br />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <input type="number" value={unitPrice} onChange={e => setUnitPrice(Number(e.target.value))} required />
+            <span>원</span>
+          </div>
+        </label>
+      </div>
+      <div>
+        <label>총 금액 (부가세 포함):<br />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <input 
+              type="text" 
+              value={calculateTotalAmount().toLocaleString()} 
+              readOnly 
+              style={{ backgroundColor: '#f5f5f5' }}
+            />
+            <span>원</span>
+          </div>
+        </label>
       </div>
       <div>
         <label>할인 항목:<br /></label>
