@@ -11,6 +11,7 @@ interface QuotationFormProps {
 }
 
 const planTypes = ['기본형', '환급형'];
+const discountTypes = ['첫 도입 할인', '재계약 할인', '특별 할인', '장기 계약 할인'];
 
 const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [schoolName, setSchoolName] = useState('');
@@ -19,10 +20,8 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
   const [planType, setPlanType] = useState(planTypes[0]);
   const [headcount, setHeadcount] = useState<number | ''>('');
   const [serviceStart, setServiceStart] = useState(() => {
-    const nextMonth = new Date();
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    nextMonth.setDate(1);
-    return nextMonth.toISOString().split('T')[0];
+    const today = new Date();
+    return today.toISOString().split('T')[0];
   });
   const [serviceEnd, setServiceEnd] = useState(() => {
     const today = new Date();
@@ -192,12 +191,16 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div>
         <label>할인 항목:<br /></label>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <input 
-            placeholder="할인명" 
+          <select 
             value={discountLabel} 
-            onChange={e => setDiscountLabel(e.target.value)} 
+            onChange={e => setDiscountLabel(e.target.value)}
             style={{ flex: 1 }}
-          />
+          >
+            <option value="">할인 유형 선택</option>
+            {discountTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
           <select 
             value={discountType} 
             onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
