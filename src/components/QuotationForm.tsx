@@ -135,8 +135,17 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         <label>인원수:<br /><input type="number" value={headcount} onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} required /></label>
       </div>
       <div>
-        <label>서비스 기간:<br />
+        <label>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>서비스 기간:</span>
+            <span style={{ color: '#666', fontSize: '0.9em' }}>
+              {(() => {
+                const { months, days } = calculateServicePeriod();
+                return `${months}개월 ${days}일`;
+              })()}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
             <input 
               type="date" 
               value={serviceStart} 
@@ -150,12 +159,6 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
               onChange={e => setServiceEnd(e.target.value)} 
               required 
             />
-          </div>
-          <div style={{ marginTop: '4px', color: '#666', fontSize: '0.9em' }}>
-            {(() => {
-              const { months, days } = calculateServicePeriod();
-              return `${months}개월 ${days}일`;
-            })()}
           </div>
         </label>
       </div>
@@ -189,18 +192,38 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
       <div>
         <label>할인 항목:<br /></label>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <input placeholder="할인명" value={discountLabel} onChange={e => setDiscountLabel(e.target.value)} />
-          <select value={discountType} onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}>
+          <input 
+            placeholder="할인명" 
+            value={discountLabel} 
+            onChange={e => setDiscountLabel(e.target.value)} 
+            style={{ flex: 1 }}
+          />
+          <select 
+            value={discountType} 
+            onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
+            style={{ width: '100px' }}
+          >
             <option value="fixed">금액 할인</option>
             <option value="percentage">% 할인</option>
           </select>
           <input 
             type="number" 
             placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
-            value={discountAmount} 
-            onChange={e => setDiscountAmount(Number(e.target.value))} 
+            value={discountAmount || ''} 
+            onChange={e => setDiscountAmount(e.target.value === '' ? 0 : Number(e.target.value))} 
+            style={{ width: '120px' }}
           />
-          <button type="button" onClick={handleAddDiscount}>추가</button>
+          <button 
+            type="button" 
+            onClick={handleAddDiscount}
+            disabled={!discountLabel || !discountAmount}
+            style={{ 
+              backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
+              cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer'
+            }}
+          >
+            추가
+          </button>
         </div>
         <ul>
           {discounts.map((d, i) => (
