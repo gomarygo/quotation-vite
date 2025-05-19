@@ -124,6 +124,40 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     return value.toLocaleString();
   };
 
+  const convertToKoreanNumber = (num: number): string => {
+    const units = ['', '만', '억', '조'];
+    const digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+    const positions = ['', '십', '백', '천'];
+    
+    if (num === 0) return '영';
+    
+    let result = '';
+    let unitIndex = 0;
+    
+    while (num > 0) {
+      let segment = num % 10000;
+      let segmentStr = '';
+      
+      if (segment > 0) {
+        let position = 0;
+        while (segment > 0) {
+          const digit = segment % 10;
+          if (digit > 0) {
+            segmentStr = digits[digit] + positions[position] + segmentStr;
+          }
+          segment = Math.floor(segment / 10);
+          position++;
+        }
+        result = segmentStr + units[unitIndex] + result;
+      }
+      
+      num = Math.floor(num / 10000);
+      unitIndex++;
+    }
+    
+    return result + '원';
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
@@ -361,24 +395,36 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         {discounts.length > 0 && (
           <div style={{ marginTop: '24px' }}>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '16px' }}>최종 견적가 (부가세 포함):</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
-              <input 
-                type="text" 
-                value={calculateFinalAmount().toLocaleString()} 
-                readOnly 
-                style={{ 
-                  backgroundColor: '#e8f0fe', 
-                  textAlign: 'right',
-                  padding: '8px',
-                  width: '300px',
-                  border: '1px solid #1a73e8',
-                  borderRadius: '4px',
-                  fontSize: '16px',
-                  fontWeight: 'bold',
-                  color: '#1a73e8'
-                }}
-              />
-              <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1a73e8' }}>원</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input 
+                  type="text" 
+                  value={calculateFinalAmount().toLocaleString()} 
+                  readOnly 
+                  style={{ 
+                    backgroundColor: '#e8f0fe', 
+                    textAlign: 'right',
+                    padding: '8px',
+                    width: '300px',
+                    border: '1px solid #1a73e8',
+                    borderRadius: '4px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#1a73e8'
+                  }}
+                />
+                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1a73e8' }}>원</span>
+              </div>
+              <div style={{ 
+                color: '#1a73e8', 
+                fontSize: '14px', 
+                fontWeight: 'bold',
+                padding: '4px 8px',
+                backgroundColor: '#e8f0fe',
+                borderRadius: '4px'
+              }}>
+                {convertToKoreanNumber(calculateFinalAmount())}
+              </div>
             </div>
           </div>
         )}
