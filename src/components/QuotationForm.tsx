@@ -25,7 +25,9 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     return koreaTime.toISOString().split('T')[0];
   });
   const [serviceEnd, setServiceEnd] = useState(() => {
+    const koreaTime = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
     const lastDay = new Date(2025, 11, 31);
+    lastDay.setHours(23, 59, 59, 999);
     return lastDay.toISOString().split('T')[0];
   });
   const [serviceMonths, setServiceMonths] = useState(3);
@@ -71,29 +73,33 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
     if (!headcount) return 0;
     const { totalDays } = calculateServicePeriod();
     const months = Math.ceil(totalDays / 30);
-    const subtotal = unitPrice * headcount * months;
-    const totalDiscount = discounts.reduce((sum, d) => {
-      if (d.type === 'percentage') {
-        return sum + (subtotal * (d.amount / 100));
-      }
-      return sum + d.amount;
-    }, 0);
-    const supplyAmount = subtotal - totalDiscount;
-    const vat = Math.round(supplyAmount / 11);
-    return supplyAmount + vat;
+    return unitPrice * headcount * months;
   };
 
-  // 할인 금액 계산 (원 단위로 표시)
-  const calculateDiscountAmount = (discount: DiscountItem, subtotal: number) => {
+  // 할인 금액 계산
+  const calculateDiscountAmount = (discount: DiscountItem, totalAmount: number) => {
     if (discount.type === 'percentage') {
-      return Math.round(subtotal * (discount.amount / 100));
+      return Math.round(totalAmount * (discount.amount / 100));
     }
     return discount.amount;
   };
 
+  // 총 할인 금액 계산
+  const calculateTotalDiscount = () => {
+    const totalAmount = calculateTotalAmount();
+    return discounts.reduce((sum, d) => sum + calculateDiscountAmount(d, totalAmount), 0);
+  };
+
+  // 최종 견적가 계산
+  const calculateFinalAmount = () => {
+    const totalAmount = calculateTotalAmount();
+    const totalDiscount = calculateTotalDiscount();
+    return totalAmount - totalDiscount;
+  };
+
   // 할인 목록 표시 형식
-  const formatDiscountDisplay = (discount: DiscountItem, subtotal: number) => {
-    const amount = calculateDiscountAmount(discount, subtotal);
+  const formatDiscountDisplay = (discount: DiscountItem, totalAmount: number) => {
+    const amount = calculateDiscountAmount(discount, totalAmount);
     return `${discount.label}: ${discount.type === 'percentage' ? `${discount.amount}% (${amount.toLocaleString()}원)` : `${amount.toLocaleString()}원`}`;
   };
 
@@ -318,13 +324,11 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
         </div>
         <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
           {discounts.map((d, i) => {
-            const { totalDays } = calculateServicePeriod();
-            const months = Math.ceil(totalDays / 30);
-            const subtotal = unitPrice * (headcount || 0) * months;
+            const totalAmount = calculateTotalAmount();
             return (
               <li key={i} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ flex: 1, fontSize: '16px' }}>
-                  {formatDiscountDisplay(d, subtotal)}
+                  {formatDiscountDisplay(d, totalAmount)}
                 </span>
                 <button 
                   type="button" 
@@ -351,7 +355,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
               <input 
                 type="text" 
-                value={calculateTotalAmount().toLocaleString()} 
+                value={calculateFinalAmount().toLocaleString()} 
                 readOnly 
                 style={{ 
                   backgroundColor: '#f5f5f5', 
