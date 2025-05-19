@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface DiscountItem {
   label: string;
@@ -48,6 +48,30 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
   const serviceEndRef = useRef<HTMLInputElement>(null);
   const unitPriceRef = useRef<HTMLInputElement>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!initialData) return;
+    setSchoolName(initialData.schoolName ?? '');
+    setRecipient(initialData.recipient ?? '');
+    setItemName(initialData.itemName ?? '수학대왕 AI코스웨어 이용권');
+    setPlanType(initialData.planType ?? planTypes[0]);
+    setHeadcount(initialData.headcount ?? '');
+    setServiceStart(initialData.serviceStart ?? (() => {
+      const today = new Date();
+      const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
+      return koreaTime.toISOString().split('T')[0];
+    })());
+    setServiceEnd(initialData.serviceEnd ?? (() => {
+      const koreaTime = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
+      const lastDay = new Date(2025, 11, 31);
+      lastDay.setHours(23, 59, 59, 999);
+      return lastDay.toISOString().split('T')[0];
+    })());
+    setServiceMonths(initialData.serviceMonths ?? 3);
+    setUnitPrice(initialData.unitPrice ?? 9900);
+    setDiscounts(initialData.discounts ?? []);
+    setNote(initialData.note ?? '* 선생님용 AI 수학 코스웨어 [수학 대왕 Class] 서비스 무료 지원\n* 선생님용 계정 무제한 제공\n* 1:1 담당자 케어 서비스 제공\n* 이용 기간 중 상시 소통 가능한 창구 및 A/S 제공');
+  }, [initialData]);
 
   const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<any>) => {
     if (e.key === 'Enter') {
