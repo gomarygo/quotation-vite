@@ -61,19 +61,19 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
   return (
     <div style={{ marginTop: 32 }}>
       <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative', borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+        {/* 제목 */}
+        <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 상단 정보 + 직인 */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', marginBottom: 16 }}>
-          <div style={{ flex: 1, fontSize: 15, lineHeight: 1.7 }}>
-            <div><b>작성일자:</b> {docDateStr}</div>
-            <div><b>문서번호:</b> {docNumber}</div>
-            <div><b>상호:</b> (주)튜링</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span><b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)</span>
-              <img src="/stamp.png" alt="직인" style={{ marginLeft: 16, width: 80, height: 80, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 10 }} />
-            </div>
-            <div><b>전화:</b> 070-4281-4869</div>
-            <div><b>사업자등록번호:</b> 254-87-01382</div>
+        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
+          <div><b>작성일자:</b> {docDateStr}</div>
+          <div><b>문서번호:</b> {docNumber}</div>
+          <div><b>상호:</b> (주)튜링</div>
+          <div>
+            <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
+            <img src="/stamp.png" alt="직인" style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8, width: 60, height: 60, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 10, position: 'relative' }} />
           </div>
+          <div><b>전화:</b> 070-4281-4869</div>
+          <div><b>사업자등록번호:</b> 254-87-01382</div>
         </div>
         {/* 수신 정보 */}
         <div style={{ fontSize: 16, marginBottom: 8 }}><b>수신:</b> {data.recipient} 귀하</div>
@@ -86,7 +86,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16, background: '#fff' }}>
           <thead>
             <tr style={{ background: '#f0f4f8' }}>
-              <th style={{ border: '1px solid #bbb', padding: 8, width: 120, textAlign: 'center' }}>구분</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center' }}>구분</th>
               <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>내용</th>
             </tr>
           </thead>
