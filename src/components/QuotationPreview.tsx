@@ -74,7 +74,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
     const units = ['', '만', '억', '조'];
     const digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
     const positions = ['', '십', '백', '천'];
-    if (num === 0) return '영';
+    if (num === 0) return '금영원정';
     let result = '';
     let unitIndex = 0;
     while (num > 0) {
@@ -95,7 +95,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
       num = Math.floor(num / 10000);
       unitIndex++;
     }
-    return result + '원';
+    return '금' + result + '원정';
   };
 
   const handleDownloadPdf = async () => {
@@ -137,7 +137,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div style={{ position: 'relative' }}>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 290, top: 10, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 435, top: -80, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
           <div style={{ position: 'relative' }}>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)

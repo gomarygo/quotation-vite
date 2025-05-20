@@ -184,7 +184,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
     const digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
     const positions = ['', '십', '백', '천'];
     
-    if (num === 0) return '영';
+    if (num === 0) return '금영원정';
     
     let result = '';
     let unitIndex = 0;
@@ -210,7 +210,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
       unitIndex++;
     }
     
-    return result + '원';
+    return '금' + result + '원정';
   };
 
   const handleSubmit = () => {
