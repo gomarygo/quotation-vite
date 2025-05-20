@@ -231,14 +231,24 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
   return (
     <form onSubmit={e => e.preventDefault()} style={{ 
       background: '#fff', 
-      padding: '32px', 
+      padding: 'clamp(12px, 3vw, 24px)',
       borderRadius: '8px', 
-      maxWidth: '800px', 
+      maxWidth: 'min(800px, 95vw)', 
       margin: '0 auto',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      width: '100%',
+      boxSizing: 'border-box'
     }}>
-      <h2 style={{ marginBottom: '24px', fontSize: '24px' }}>학교 견적서 생성기</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <h2 style={{ 
+        marginBottom: 'clamp(16px, 4vw, 24px)', 
+        fontSize: 'clamp(18px, 4vw, 24px)', 
+        textAlign: 'center' 
+      }}>학교 견적서 생성기</h2>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', 
+        gap: 'clamp(12px, 2vw, 24px)'
+      }}>
         <div>
           <label style={{ display: 'block', marginBottom: '8px' }}>학교명:<br />
             <input 
@@ -246,7 +256,12 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               value={schoolName} 
               onChange={handleSchoolNameChange} 
               required 
-              style={{ width: '100%', padding: '8px' }}
+              style={{ 
+                width: '100%', 
+                padding: 'clamp(8px, 2vw, 12px)',
+                fontSize: 'clamp(14px, 2vw, 16px)',
+                boxSizing: 'border-box'
+              }}
               onKeyDown={e => handleKeyDown(e, recipientRef)}
               lang="ko"
               inputMode="text"
@@ -314,36 +329,48 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
           </label>
         </div>
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>서비스 기간:</span>
-              <span style={{ color: '#666', fontSize: '0.9em' }}>
-                {(() => {
-                  const { months, days } = calculateServicePeriod();
-                  return `${months}개월 ${days}일`;
-                })()}
-              </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
-              <input 
-                ref={serviceStartRef}
-                type="date" 
-                value={serviceStart} 
-                onChange={e => setServiceStart(e.target.value)} 
-                required 
-                style={{ flex: 1, padding: '8px' }}
-                onKeyDown={e => handleKeyDown(e, serviceEndRef)}
-              />
-              <span>~</span>
-              <input 
-                ref={serviceEndRef}
-                type="date" 
-                value={serviceEnd} 
-                onChange={e => setServiceEnd(e.target.value)} 
-                required 
-                style={{ flex: 1, padding: '8px' }}
-                onKeyDown={e => handleKeyDown(e, unitPriceRef)}
-              />
+          <label style={{ display: 'block', marginBottom: '8px' }}>서비스 기간:<br />
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                flexWrap: 'wrap'
+              }}>
+                <input 
+                  ref={serviceStartRef}
+                  type="date" 
+                  value={serviceStart} 
+                  onChange={e => setServiceStart(e.target.value)} 
+                  required 
+                  style={{ 
+                    flex: '1 1 200px',
+                    padding: 'clamp(8px, 2vw, 12px)',
+                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    boxSizing: 'border-box'
+                  }}
+                  onKeyDown={e => handleKeyDown(e, serviceEndRef)}
+                />
+                <span>~</span>
+                <input 
+                  ref={serviceEndRef}
+                  type="date" 
+                  value={serviceEnd} 
+                  onChange={e => setServiceEnd(e.target.value)} 
+                  required 
+                  style={{ 
+                    flex: '1 1 200px',
+                    padding: 'clamp(8px, 2vw, 12px)',
+                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    boxSizing: 'border-box'
+                  }}
+                  onKeyDown={e => handleKeyDown(e, unitPriceRef)}
+                />
+              </div>
             </div>
           </label>
         </div>
@@ -384,14 +411,31 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
         </div>
       </div>
 
-      <div style={{ marginTop: '32px' }}>
-        <label style={{ display: 'block', marginBottom: '16px', fontSize: '16px' }}>할인 항목:</label>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div style={{ marginTop: 'clamp(16px, 4vw, 32px)' }}>
+        <label style={{ 
+          display: 'block', 
+          marginBottom: 'clamp(12px, 3vw, 16px)', 
+          fontSize: 'clamp(14px, 3vw, 16px)' 
+        }}>할인 항목:</label>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 'clamp(8px, 2vw, 12px)'
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: 'clamp(8px, 2vw, 12px)'
+          }}>
             <select 
               value={discountLabel} 
               onChange={e => setDiscountLabel(e.target.value)}
-              style={{ flex: 1, padding: '8px' }}
+              style={{ 
+                width: '100%', 
+                padding: 'clamp(8px, 2vw, 12px)',
+                fontSize: 'clamp(14px, 2vw, 16px)',
+                boxSizing: 'border-box'
+              }}
             >
               <option value="">할인 유형 선택</option>
               {discountTypes.map(type => (
@@ -401,24 +445,38 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
             <select 
               value={discountType} 
               onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
-              style={{ width: '140px', padding: '8px' }}
+              style={{ 
+                width: '100%', 
+                padding: 'clamp(8px, 2vw, 12px)',
+                fontSize: 'clamp(14px, 2vw, 16px)',
+                boxSizing: 'border-box'
+              }}
             >
               <option value="fixed">금액 할인</option>
               <option value="percentage">% 할인</option>
             </select>
           </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: 'clamp(8px, 2vw, 12px)'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              flexWrap: 'wrap'
+            }}>
               <input 
                 type="text" 
                 placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
                 value={formatNumber(discountAmount)} 
                 onChange={handleDiscountAmountChange}
                 style={{ 
-                  flex: 1, 
-                  padding: '8px',
-                  fontSize: '16px',
-                  minWidth: '200px'
+                  flex: '1 1 200px',
+                  padding: 'clamp(8px, 2vw, 12px)',
+                  fontSize: 'clamp(14px, 2vw, 16px)',
+                  boxSizing: 'border-box'
                 }}
                 onKeyDown={e => {
                   if (e.key === 'Enter') {
@@ -431,7 +489,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               <span style={{ 
                 whiteSpace: 'nowrap', 
                 minWidth: '40px',
-                fontSize: '16px'
+                fontSize: 'clamp(14px, 2vw, 16px)'
               }}>
                 {discountType === 'percentage' ? '%' : '원'}
               </span>
@@ -443,37 +501,49 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
               style={{ 
                 backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
                 cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer',
-                padding: '8px 24px',
+                padding: 'clamp(8px, 2vw, 12px)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                minWidth: '100px',
-                fontSize: '16px'
+                width: '100%',
+                fontSize: 'clamp(14px, 2vw, 16px)'
               }}
             >
               추가
             </button>
           </div>
         </div>
-        <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
+        <ul style={{ 
+          marginTop: 'clamp(12px, 3vw, 16px)', 
+          paddingLeft: 'clamp(16px, 4vw, 20px)'
+        }}>
           {discounts.map((d, i) => {
             const totalAmount = calculateTotalAmount();
             return (
-              <li key={i} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ flex: 1, fontSize: '16px' }}>
+              <li key={i} style={{ 
+                marginBottom: 'clamp(8px, 2vw, 12px)', 
+                display: 'flex', 
+                flexDirection: 'column',
+                gap: 'clamp(8px, 2vw, 12px)'
+              }}>
+                <span style={{ 
+                  fontSize: 'clamp(14px, 2vw, 16px)',
+                  wordBreak: 'break-all'
+                }}>
                   {formatDiscountDisplay(d, totalAmount)}
                 </span>
                 <button 
                   type="button" 
                   onClick={() => handleRemoveDiscount(i)}
                   style={{ 
-                    padding: '4px 12px',
+                    padding: 'clamp(4px, 1vw, 8px) clamp(8px, 2vw, 12px)',
                     backgroundColor: '#ff4444',
                     color: 'white',
                     border: 'none',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    fontSize: '14px'
+                    fontSize: 'clamp(12px, 2vw, 14px)',
+                    alignSelf: 'flex-start'
                   }}
                 >
                   삭제
@@ -483,10 +553,25 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
           })}
         </ul>
         {discounts.length > 0 && (
-          <div style={{ marginTop: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '16px' }}>최종 견적가 (부가세 포함):</label>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ marginTop: 'clamp(16px, 4vw, 24px)' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 'clamp(8px, 2vw, 12px)', 
+              fontSize: 'clamp(14px, 2vw, 16px)' 
+            }}>최종 견적가 (부가세 포함):</label>
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'flex-end', 
+              gap: 'clamp(8px, 2vw, 12px)'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                width: '100%',
+                flexWrap: 'wrap'
+              }}>
                 <input 
                   type="text" 
                   value={calculateFinalAmount().toLocaleString()} 
@@ -494,24 +579,33 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
                   style={{ 
                     backgroundColor: '#e8f0fe', 
                     textAlign: 'right',
-                    padding: '8px',
-                    width: '300px',
+                    padding: 'clamp(8px, 2vw, 12px)',
+                    width: '100%',
                     border: '1px solid #1a73e8',
                     borderRadius: '4px',
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 2vw, 16px)',
                     fontWeight: 'bold',
-                    color: '#1a73e8'
+                    color: '#1a73e8',
+                    boxSizing: 'border-box'
                   }}
                 />
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1a73e8' }}>원</span>
+                <span style={{ 
+                  fontSize: 'clamp(14px, 2vw, 16px)', 
+                  fontWeight: 'bold', 
+                  color: '#1a73e8',
+                  whiteSpace: 'nowrap'
+                }}>원</span>
               </div>
               <div style={{ 
                 color: '#1a73e8', 
-                fontSize: '14px', 
+                fontSize: 'clamp(12px, 2vw, 14px)', 
                 fontWeight: 'bold',
-                padding: '4px 8px',
+                padding: 'clamp(4px, 1vw, 8px)',
                 backgroundColor: '#e8f0fe',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                width: '100%',
+                textAlign: 'center',
+                wordBreak: 'break-all'
               }}>
                 {convertToKoreanNumber(calculateFinalAmount())}
               </div>
@@ -520,8 +614,12 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
         )}
       </div>
 
-      <div style={{ marginTop: '32px' }}>
-        <label style={{ display: 'block', marginBottom: '8px' }}>비고:<br />
+      <div style={{ marginTop: 'clamp(16px, 4vw, 24px)' }}>
+        <label style={{ 
+          display: 'block', 
+          marginBottom: 'clamp(8px, 2vw, 12px)',
+          fontSize: 'clamp(14px, 2vw, 16px)'
+        }}>비고:<br />
           <textarea 
             ref={noteRef}
             value={note} 
@@ -529,8 +627,11 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
             rows={4} 
             style={{ 
               width: '100%', 
-              padding: '8px',
-              resize: 'vertical'
+              padding: 'clamp(8px, 2vw, 12px)',
+              resize: 'vertical',
+              boxSizing: 'border-box',
+              fontSize: 'clamp(14px, 2vw, 16px)',
+              minHeight: '100px'
             }} 
             onKeyDown={() => {}}
             placeholder="예) 특이사항, 요청사항 등"
@@ -542,14 +643,14 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
         type="button"
         onClick={handleSubmit}
         style={{ 
-          marginTop: '32px', 
+          marginTop: 'clamp(16px, 4vw, 24px)', 
           width: '100%',
-          padding: '12px',
+          padding: 'clamp(10px, 2vw, 12px)',
           backgroundColor: '#1a73e8',
           color: 'white',
           border: 'none',
           borderRadius: '4px',
-          fontSize: '16px',
+          fontSize: 'clamp(14px, 2vw, 16px)',
           cursor: 'pointer'
         }}
       >
