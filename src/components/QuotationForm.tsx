@@ -229,213 +229,159 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
   };
 
   return (
-    <form onSubmit={e => e.preventDefault()} style={{ 
-      background: '#fff', 
-      padding: 'clamp(12px, 3vw, 24px)',
-      borderRadius: '8px', 
-      maxWidth: 'min(800px, 95vw)', 
-      margin: '0 auto',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      width: '100%',
-      boxSizing: 'border-box'
-    }}>
-      <h2 style={{ 
-        marginBottom: 'clamp(16px, 4vw, 24px)', 
-        fontSize: 'clamp(18px, 4vw, 24px)', 
-        textAlign: 'center' 
-      }}>학교 견적서 생성기</h2>
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', 
-        gap: 'clamp(12px, 2vw, 24px)'
-      }}>
+    <form onSubmit={e => e.preventDefault()} className="bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-sm w-full max-w-3xl mx-auto">
+      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-center mb-4 sm:mb-6 md:mb-8">학교 견적서 생성기</h2>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>학교명:<br />
+          <label className="block mb-2">
+            학교명:
             <input 
               ref={schoolNameRef}
               value={schoolName} 
               onChange={handleSchoolNameChange} 
               required 
-              style={{ 
-                width: '100%', 
-                padding: 'clamp(8px, 2vw, 12px)',
-                fontSize: 'clamp(14px, 2vw, 16px)',
-                boxSizing: 'border-box'
-              }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onKeyDown={e => handleKeyDown(e, recipientRef)}
               lang="ko"
               inputMode="text"
             />
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>수신자:<br />
+          <label className="block mb-2">
+            수신자:
             <input 
               ref={recipientRef}
               value={recipient} 
               onChange={handleRecipientChange}
               required 
-              style={{ width: '100%', padding: '8px' }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onKeyDown={e => handleKeyDown(e, itemNameRef)}
               lang="ko"
               inputMode="text"
             />
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>항목명:<br />
+          <label className="block mb-2">
+            항목명:
             <input 
               ref={itemNameRef}
               value={itemName} 
               onChange={e => setItemName(e.target.value)} 
               required 
-              style={{ width: '100%', padding: '8px' }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onKeyDown={e => handleKeyDown(e, planTypeRef)}
               placeholder="예) 수학대왕 AI코스웨어 이용권"
             />
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>플랜 유형:<br />
+          <label className="block mb-2">
+            플랜 유형:
             <select 
               ref={planTypeRef}
               value={planType} 
               onChange={e => setPlanType(e.target.value)}
-              style={{ width: '100%', padding: '8px' }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               onKeyDown={e => handleKeyDown(e, headcountRef)}
             >
               {planTypes.map(type => <option key={type}>{type}</option>)}
             </select>
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>인원수:<br />
+          <label className="block mb-2">
+            인원수:
             <input 
               ref={headcountRef}
               type="number" 
               value={headcount} 
               onChange={e => setHeadcount(e.target.value === '' ? '' : Number(e.target.value))} 
               required 
-              style={{ width: '100%', padding: '8px' }}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  if (serviceStartRef.current) serviceStartRef.current.focus();
-                }
-              }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              onKeyDown={e => handleKeyDown(e, serviceStartRef)}
               lang="ko"
               inputMode="text"
             />
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>서비스 기간:<br />
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column',
-              gap: '8px'
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                flexWrap: 'wrap'
-              }}>
-                <input 
-                  ref={serviceStartRef}
-                  type="date" 
-                  value={serviceStart} 
-                  onChange={e => setServiceStart(e.target.value)} 
-                  required 
-                  style={{ 
-                    flex: '1 1 200px',
-                    padding: 'clamp(8px, 2vw, 12px)',
-                    fontSize: 'clamp(14px, 2vw, 16px)',
-                    boxSizing: 'border-box'
-                  }}
-                  onKeyDown={e => handleKeyDown(e, serviceEndRef)}
-                />
-                <span>~</span>
-                <input 
-                  ref={serviceEndRef}
-                  type="date" 
-                  value={serviceEnd} 
-                  onChange={e => setServiceEnd(e.target.value)} 
-                  required 
-                  style={{ 
-                    flex: '1 1 200px',
-                    padding: 'clamp(8px, 2vw, 12px)',
-                    fontSize: 'clamp(14px, 2vw, 16px)',
-                    boxSizing: 'border-box'
-                  }}
-                  onKeyDown={e => handleKeyDown(e, unitPriceRef)}
-                />
-              </div>
+          <label className="block mb-2">
+            서비스 기간:
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input 
+                ref={serviceStartRef}
+                type="date" 
+                value={serviceStart} 
+                onChange={e => setServiceStart(e.target.value)} 
+                required 
+                className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onKeyDown={e => handleKeyDown(e, serviceEndRef)}
+              />
+              <span className="hidden sm:inline">~</span>
+              <input 
+                ref={serviceEndRef}
+                type="date" 
+                value={serviceEnd} 
+                onChange={e => setServiceEnd(e.target.value)} 
+                required 
+                className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onKeyDown={e => handleKeyDown(e, unitPriceRef)}
+              />
             </div>
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>1인당 월 단가:<br />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+          <label className="block mb-2">
+            1인당 월 단가:
+            <div className="flex items-center gap-2">
               <input 
                 ref={unitPriceRef}
                 type="text" 
                 value={unitPrice.toLocaleString()} 
                 onChange={e => setUnitPrice(Number(e.target.value.replace(/,/g, '')))} 
                 required 
-                style={{ width: '100%', textAlign: 'right', padding: '8px' }} 
+                className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right"
                 onKeyDown={e => handleKeyDown(e, noteRef)}
                 placeholder="예) 9,900"
               />
-              <span>원</span>
+              <span className="whitespace-nowrap">원</span>
             </div>
           </label>
         </div>
+
         <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>총 금액 (부가세 포함):<br />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+          <label className="block mb-2">
+            총 금액 (부가세 포함):
+            <div className="flex items-center gap-2">
               <input 
                 type="text" 
                 value={calculateTotalAmount().toLocaleString()} 
                 readOnly 
-                style={{ 
-                  width: '100%',
-                  backgroundColor: '#f5f5f5', 
-                  textAlign: 'right',
-                  padding: '8px'
-                }}
+                className="w-full p-2 sm:p-3 text-sm sm:text-base bg-gray-50 border rounded text-right"
               />
-              <span>원</span>
+              <span className="whitespace-nowrap">원</span>
             </div>
           </label>
         </div>
       </div>
 
-      <div style={{ marginTop: 'clamp(16px, 4vw, 32px)' }}>
-        <label style={{ 
-          display: 'block', 
-          marginBottom: 'clamp(12px, 3vw, 16px)', 
-          fontSize: 'clamp(14px, 3vw, 16px)' 
-        }}>할인 항목:</label>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: 'clamp(8px, 2vw, 12px)'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: 'clamp(8px, 2vw, 12px)'
-          }}>
+      <div className="mt-6 sm:mt-8">
+        <label className="block mb-4 text-sm sm:text-base">할인 항목:</label>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <select 
               value={discountLabel} 
               onChange={e => setDiscountLabel(e.target.value)}
-              style={{ 
-                width: '100%', 
-                padding: 'clamp(8px, 2vw, 12px)',
-                fontSize: 'clamp(14px, 2vw, 16px)',
-                boxSizing: 'border-box'
-              }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">할인 유형 선택</option>
               {discountTypes.map(type => (
@@ -445,39 +391,21 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
             <select 
               value={discountType} 
               onChange={e => setDiscountType(e.target.value as 'percentage' | 'fixed')}
-              style={{ 
-                width: '100%', 
-                padding: 'clamp(8px, 2vw, 12px)',
-                fontSize: 'clamp(14px, 2vw, 16px)',
-                boxSizing: 'border-box'
-              }}
+              className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="fixed">금액 할인</option>
               <option value="percentage">% 할인</option>
             </select>
           </div>
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: 'clamp(8px, 2vw, 12px)'
-          }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px',
-              flexWrap: 'wrap'
-            }}>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
               <input 
                 type="text" 
                 placeholder={discountType === 'percentage' ? "할인율" : "금액"} 
                 value={formatNumber(discountAmount)} 
                 onChange={handleDiscountAmountChange}
-                style={{ 
-                  flex: '1 1 200px',
-                  padding: 'clamp(8px, 2vw, 12px)',
-                  fontSize: 'clamp(14px, 2vw, 16px)',
-                  boxSizing: 'border-box'
-                }}
+                className="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 onKeyDown={e => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -486,65 +414,37 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
                   }
                 }}
               />
-              <span style={{ 
-                whiteSpace: 'nowrap', 
-                minWidth: '40px',
-                fontSize: 'clamp(14px, 2vw, 16px)'
-              }}>
+              <span className="whitespace-nowrap text-sm sm:text-base">
                 {discountType === 'percentage' ? '%' : '원'}
               </span>
             </div>
+
             <button 
               type="button" 
               onClick={handleAddDiscount}
               disabled={!discountLabel || !discountAmount}
-              style={{ 
-                backgroundColor: !discountLabel || !discountAmount ? '#ccc' : '#1a73e8',
-                cursor: !discountLabel || !discountAmount ? 'not-allowed' : 'pointer',
-                padding: 'clamp(8px, 2vw, 12px)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                width: '100%',
-                fontSize: 'clamp(14px, 2vw, 16px)'
-              }}
+              className={`w-full p-2 sm:p-3 text-sm sm:text-base text-white rounded transition-colors
+                ${!discountLabel || !discountAmount 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-600 hover:bg-blue-700'}`}
             >
               추가
             </button>
           </div>
         </div>
-        <ul style={{ 
-          marginTop: 'clamp(12px, 3vw, 16px)', 
-          paddingLeft: 'clamp(16px, 4vw, 20px)'
-        }}>
+
+        <ul className="mt-4 space-y-3">
           {discounts.map((d, i) => {
             const totalAmount = calculateTotalAmount();
             return (
-              <li key={i} style={{ 
-                marginBottom: 'clamp(8px, 2vw, 12px)', 
-                display: 'flex', 
-                flexDirection: 'column',
-                gap: 'clamp(8px, 2vw, 12px)'
-              }}>
-                <span style={{ 
-                  fontSize: 'clamp(14px, 2vw, 16px)',
-                  wordBreak: 'break-all'
-                }}>
+              <li key={i} className="flex flex-col gap-2">
+                <span className="text-sm sm:text-base break-words">
                   {formatDiscountDisplay(d, totalAmount)}
                 </span>
                 <button 
                   type="button" 
                   onClick={() => handleRemoveDiscount(i)}
-                  style={{ 
-                    padding: 'clamp(4px, 1vw, 8px) clamp(8px, 2vw, 12px)',
-                    backgroundColor: '#ff4444',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: 'clamp(12px, 2vw, 14px)',
-                    alignSelf: 'flex-start'
-                  }}
+                  className="px-3 py-1 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors w-fit"
                 >
                   삭제
                 </button>
@@ -552,61 +452,21 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
             );
           })}
         </ul>
+
         {discounts.length > 0 && (
-          <div style={{ marginTop: 'clamp(16px, 4vw, 24px)' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: 'clamp(8px, 2vw, 12px)', 
-              fontSize: 'clamp(14px, 2vw, 16px)' 
-            }}>최종 견적가 (부가세 포함):</label>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'flex-end', 
-              gap: 'clamp(8px, 2vw, 12px)'
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                width: '100%',
-                flexWrap: 'wrap'
-              }}>
+          <div className="mt-6 sm:mt-8">
+            <label className="block mb-2 text-sm sm:text-base">최종 견적가 (부가세 포함):</label>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
                 <input 
                   type="text" 
                   value={calculateFinalAmount().toLocaleString()} 
                   readOnly 
-                  style={{ 
-                    backgroundColor: '#e8f0fe', 
-                    textAlign: 'right',
-                    padding: 'clamp(8px, 2vw, 12px)',
-                    width: '100%',
-                    border: '1px solid #1a73e8',
-                    borderRadius: '4px',
-                    fontSize: 'clamp(14px, 2vw, 16px)',
-                    fontWeight: 'bold',
-                    color: '#1a73e8',
-                    boxSizing: 'border-box'
-                  }}
+                  className="w-full p-2 sm:p-3 text-sm sm:text-base bg-blue-50 border border-blue-500 rounded text-right font-semibold text-blue-600"
                 />
-                <span style={{ 
-                  fontSize: 'clamp(14px, 2vw, 16px)', 
-                  fontWeight: 'bold', 
-                  color: '#1a73e8',
-                  whiteSpace: 'nowrap'
-                }}>원</span>
+                <span className="whitespace-nowrap text-sm sm:text-base font-semibold text-blue-600">원</span>
               </div>
-              <div style={{ 
-                color: '#1a73e8', 
-                fontSize: 'clamp(12px, 2vw, 14px)', 
-                fontWeight: 'bold',
-                padding: 'clamp(4px, 1vw, 8px)',
-                backgroundColor: '#e8f0fe',
-                borderRadius: '4px',
-                width: '100%',
-                textAlign: 'center',
-                wordBreak: 'break-all'
-              }}>
+              <div className="p-2 bg-blue-50 rounded text-center text-sm sm:text-base font-semibold text-blue-600 break-words">
                 {convertToKoreanNumber(calculateFinalAmount())}
               </div>
             </div>
@@ -614,25 +474,15 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
         )}
       </div>
 
-      <div style={{ marginTop: 'clamp(16px, 4vw, 24px)' }}>
-        <label style={{ 
-          display: 'block', 
-          marginBottom: 'clamp(8px, 2vw, 12px)',
-          fontSize: 'clamp(14px, 2vw, 16px)'
-        }}>비고:<br />
+      <div className="mt-6 sm:mt-8">
+        <label className="block mb-2 text-sm sm:text-base">
+          비고:
           <textarea 
             ref={noteRef}
             value={note} 
             onChange={e => setNote(e.target.value)} 
             rows={4} 
-            style={{ 
-              width: '100%', 
-              padding: 'clamp(8px, 2vw, 12px)',
-              resize: 'vertical',
-              boxSizing: 'border-box',
-              fontSize: 'clamp(14px, 2vw, 16px)',
-              minHeight: '100px'
-            }} 
+            className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y min-h-[100px]"
             onKeyDown={() => {}}
             placeholder="예) 특이사항, 요청사항 등"
           />
@@ -642,17 +492,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onSubmit, initialData }) 
       <button 
         type="button"
         onClick={handleSubmit}
-        style={{ 
-          marginTop: 'clamp(16px, 4vw, 24px)', 
-          width: '100%',
-          padding: 'clamp(10px, 2vw, 12px)',
-          backgroundColor: '#1a73e8',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          fontSize: 'clamp(14px, 2vw, 16px)',
-          cursor: 'pointer'
-        }}
+        className="w-full mt-6 sm:mt-8 p-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base"
       >
         견적서 미리보기
       </button>
