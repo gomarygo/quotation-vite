@@ -133,7 +133,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16, position: 'relative', paddingRight: '120px', minHeight: 100 }}>
           {/* 직인 이미지: 오른쪽 상단에 고정 */}
           <img 
-            src="/stamp.png" 
+            src="stamp.png" 
             alt="직인" 
             style={{ 
               position: 'absolute', 
