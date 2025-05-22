@@ -126,23 +126,23 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
 
   return (
     <div style={{ marginTop: 32 }}>
-      <div ref={printRef} style={{ background: '#fff', padding: 32, width: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative', borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+      <div ref={printRef} style={{ background: '#fff', padding: 32, width: '100%', maxWidth: 800, margin: '0 auto', fontFamily: 'sans-serif', color: '#222', position: 'relative', borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
         {/* 제목 */}
         <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 상단 정보 + 직인 */}
-        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
+        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16, position: 'relative' }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
           <div><b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규</div>
           <div><b>사업자등록번호:</b> 254-87-01382</div>
-          <div style={{ position: 'relative' }}>
+          <div>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 435, top: -80, width: 90, height: 90, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', width: 'min(90px, 15%)', height: 'auto', objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
-          <div style={{ position: 'relative' }}>
+          <div>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
           </div>
-          <div style={{ position: 'relative' }}>
+          <div>
             <b>전화:</b> 070-4281-4869 <b style={{ margin: '0 8px' }}>|</b> <b>메일:</b> tax@teamturing.com
           </div>
         </div>
