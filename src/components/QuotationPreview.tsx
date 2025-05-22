@@ -130,14 +130,14 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         {/* 제목 */}
         <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 상단 정보 + 직인 */}
-        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16, position: 'relative' }}>
+        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16, position: 'relative', paddingRight: '120px' }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
           <div><b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규</div>
           <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
-            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', width: 'min(90px, 15%)', height: 'auto', objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
+            <img src="/stamp.png" alt="직인" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', width: 100, height: 100, objectFit: 'contain', opacity: 0.8, background: 'transparent', border: 'none', zIndex: 20, pointerEvents: 'none' }} />
           </div>
           <div>
             <b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)
