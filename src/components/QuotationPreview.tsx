@@ -133,26 +133,27 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span>
-              <b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 4 }}>
             <img
               src="stamp.png"
               alt="직인"
               style={{
-                width: 60,
                 height: 60,
+                width: 'auto',
                 objectFit: 'contain',
                 opacity: 0.85,
-                marginLeft: 8,
+                marginRight: 12,
                 background: 'transparent',
                 border: 'none',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                flexShrink: 0
               }}
             />
+            <div>
+              <div><b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규</div>
+              <div><b>사업자등록번호:</b> 254-87-01382</div>
+            </div>
           </div>
-          <div><b>사업자등록번호:</b> 254-87-01382</div>
           <div>
             <b>업태 및 종목:</b> 정보통신업 / 응용소프트웨어 개발 및 공급
           </div>
