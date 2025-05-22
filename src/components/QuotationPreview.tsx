@@ -114,19 +114,15 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
     const contentHeight = (canvas.height * contentWidth) / canvas.width;
     pdf.addImage(imgData, 'PNG', margin, margin, contentWidth, contentHeight);
 
-    // 모바일 대응: bloburl로 새 창에 띄우기
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      window.open(pdf.output('bloburl'), '_blank');
-    } else {
-      // PC는 기존처럼 다운로드
-      const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
-      const yy = String(koreaNow.getUTCFullYear()).slice(2, 4);
-      const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
-      const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
-      const yymmdd = `${yy}${mm}${dd}`;
-      const cleanSchoolName = data.schoolName.replace(/[^가-힣a-zA-Z0-9]/g, '');
-      pdf.save(`${yymmdd} ${cleanSchoolName} 견적서.pdf`);
-    }
+    // 파일명: 작성일자 학교명 견적서.pdf (작성일자는 yymmdd 형식)
+    const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+    const yy = String(koreaNow.getUTCFullYear()).slice(2, 4);
+    const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
+    const yymmdd = `${yy}${mm}${dd}`;
+    const cleanSchoolName = data.schoolName.replace(/[^가-힣a-zA-Z0-9]/g, '');
+    const filename = `${yymmdd} ${cleanSchoolName} 견적서.pdf`;
+    pdf.save(filename);
   };
 
   return (
