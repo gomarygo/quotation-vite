@@ -133,27 +133,23 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
-          <div style={{ position: 'relative', display: 'inline-block', marginBottom: 8, minWidth: 250 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8, minHeight: 60 }}>
             <div>
-              <b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규
-            </div>
-            <div>
-              <b>사업자등록번호:</b> 254-87-01382
+              <div><b>상호:</b> (주)튜링 <b style={{ margin: '0 8px' }}>|</b> <b>대표:</b> 최민규</div>
+              <div><b>사업자등록번호:</b> 254-87-01382</div>
             </div>
             <img
               src="stamp.png"
               alt="직인"
               style={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
                 width: 60,
                 height: 60,
-                opacity: 0.3,
-                pointerEvents: 'none',
-                zIndex: 1,
+                marginLeft: 16,
+                objectFit: 'contain',
+                opacity: 0.85,
                 background: 'transparent',
-                border: 'none'
+                border: 'none',
+                pointerEvents: 'none'
               }}
             />
           </div>
