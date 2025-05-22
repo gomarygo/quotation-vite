@@ -109,19 +109,24 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
     const margin = 15; // Add margins
     const contentWidth = pdfWidth - (margin * 2);
     const contentHeight = (canvas.height * contentWidth) / canvas.width;
     pdf.addImage(imgData, 'PNG', margin, margin, contentWidth, contentHeight);
-    // 파일명: 작성일자 학교명 견적서.pdf (작성일자는 yymmdd 형식)
-    const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
-    const yy = String(koreaNow.getUTCFullYear()).slice(2, 4);
-    const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
-    const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
-    const yymmdd = `${yy}${mm}${dd}`;
-    const cleanSchoolName = data.schoolName.replace(/[^가-힣a-zA-Z0-9]/g, '');
-    pdf.save(`${yymmdd} ${cleanSchoolName} 견적서.pdf`);
+
+    // 모바일 대응: bloburl로 새 창에 띄우기
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      window.open(pdf.output('bloburl'), '_blank');
+    } else {
+      // PC는 기존처럼 다운로드
+      const koreaNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+      const yy = String(koreaNow.getUTCFullYear()).slice(2, 4);
+      const mm = String(koreaNow.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(koreaNow.getUTCDate()).padStart(2, '0');
+      const yymmdd = `${yy}${mm}${dd}`;
+      const cleanSchoolName = data.schoolName.replace(/[^가-힣a-zA-Z0-9]/g, '');
+      pdf.save(`${yymmdd} ${cleanSchoolName} 견적서.pdf`);
+    }
   };
 
   return (
@@ -165,6 +170,13 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           다음과 같이 견적서를 전달드리오니 검토 후 회신 부탁드립니다.
         </div>
         {/* 표 */}
+        <style>
+          {`
+            table th, table td {
+              vertical-align: middle !important;
+            }
+          `}
+        </style>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16, fontSize: 16, background: '#fff', tableLayout: 'fixed' }}>
           <colgroup>
             <col style={{ width: '30%' }} />
@@ -172,26 +184,26 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           </colgroup>
           <thead>
             <tr style={{ background: '#f0f4f8' }}>
-              <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center' }}>구분</th>
-              <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>내용</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>구분</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>내용</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.schoolName}</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.itemName} ({data.planType})</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.schoolName}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.itemName} ({data.planType})</td></tr>
             <tr>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>1인당 월 단가 / 인원</td>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>1인당 월 단가 / 인원</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
             </tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
             <tr>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550 }}>총 금액</td>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550 }}>{totalAmount.toLocaleString()}원</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>총 금액</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{totalAmount.toLocaleString()}원</td>
             </tr>
             {data.discounts.length > 0 && data.discounts.map((d, i) => (
               <tr key={i}>
-                <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red' }}>{d.label}</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center' }}>
+                <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{d.label}</td>
+                <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>
                   -{calculateDiscountAmount(d, totalAmount).toLocaleString()}원
                   {d.type === 'percentage' && ` (${d.amount}% 할인)`}
                 </td>
@@ -199,8 +211,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             ))}
             {data.discounts.length > 0 && (
               <tr style={{ background: '#f8f8f8' }}>
-                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center' }}>최종 견적가</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#000' }}>
+                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>최종 견적가</td>
+                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#000', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>
                   {finalAmount.toLocaleString()}원
                   <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(finalAmount))})</span>
                 </td>
