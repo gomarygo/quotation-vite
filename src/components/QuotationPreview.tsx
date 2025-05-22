@@ -130,27 +130,7 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         {/* 제목 */}
         <h2 style={{ textAlign: 'center', margin: '0 0 32px 0', fontSize: 32, fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 상단 정보 + 직인 */}
-        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16, position: 'relative', paddingRight: '120px', minHeight: 100 }}>
-          {/* 직인 이미지: 오른쪽 상단에 고정 */}
-          <img 
-            src="stamp.png" 
-            alt="직인" 
-            style={{ 
-              position: 'absolute', 
-              top: 0, 
-              right: 0, 
-              width: '90px', 
-              maxWidth: '25vw', 
-              minWidth: '60px', 
-              height: 'auto', 
-              objectFit: 'contain', 
-              opacity: 0.85, 
-              background: 'transparent', 
-              border: 'none', 
-              zIndex: 20, 
-              pointerEvents: 'none' 
-            }} 
-          />
+        <div style={{ fontSize: 15, lineHeight: 1.7, marginBottom: 16 }}>
           <div><b>작성일자:</b> {currentDate}</div>
           <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
