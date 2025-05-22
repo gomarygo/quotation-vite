@@ -180,26 +180,26 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
           </colgroup>
           <thead>
             <tr style={{ background: '#f0f4f8' }}>
-              <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>구분</th>
-              <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>내용</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, width: 90, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>구분</th>
+              <th style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>내용</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.schoolName}</td></tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.itemName} ({data.planType})</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{data.schoolName}</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{data.itemName} ({data.planType})</td></tr>
             <tr>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>1인당 월 단가 / 인원</td>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>1인당 월 단가 / 인원</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
             </tr>
-            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
+            <tr><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
             <tr>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>총 금액</td>
-              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{totalAmount.toLocaleString()}원</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>총 금액</td>
+              <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', fontWeight: 550, verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{totalAmount.toLocaleString()}원</td>
             </tr>
             {data.discounts.length > 0 && data.discounts.map((d, i) => (
               <tr key={i}>
-                <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>{d.label}</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>
+                <td style={{ border: '1px solid #bbb', padding: 8, textAlign: 'center', color: 'red', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>{d.label}</td>
+                <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>
                   -{calculateDiscountAmount(d, totalAmount).toLocaleString()}원
                   {d.type === 'percentage' && ` (${d.amount}% 할인)`}
                 </td>
@@ -207,8 +207,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
             ))}
             {data.discounts.length > 0 && (
               <tr style={{ background: '#f8f8f8' }}>
-                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>최종 견적가</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#000', verticalAlign: 'middle', height: 50, lineHeight: '50px' }}>
+                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, textAlign: 'center', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>최종 견적가</td>
+                <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, textAlign: 'center', color: '#000', verticalAlign: 'middle', height: 32, lineHeight: '32px' }}>
                   {finalAmount.toLocaleString()}원
                   <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(finalAmount))})</span>
                 </td>
