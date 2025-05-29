@@ -181,11 +181,35 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         <style>
           {`
             @media (max-width: 600px) {
-              table th, table td {
-                padding: 6px !important;
-                font-size: 14px !important;
+              table, thead, tbody, th, td, tr {
+                display: block !important;
+                width: 100% !important;
+              }
+              table {
+                min-width: 0 !important;
+              }
+              thead tr {
+                display: none !important;
+              }
+              tr {
+                margin-bottom: 12px;
+                border-bottom: 1px solid #eee;
+              }
+              td {
+                text-align: left !important;
+                padding-left: 8px !important;
+                border: none !important;
+                font-size: 15px !important;
+                display: block !important;
                 height: auto !important;
                 min-height: auto !important;
+              }
+              td:before {
+                content: attr(data-label);
+                display: block;
+                font-weight: bold;
+                color: #888;
+                margin-bottom: 2px;
               }
             }
             table th, table td {
@@ -206,21 +230,21 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
               </tr>
             </thead>
             <tbody>
-              <tr><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>학교명</td><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.schoolName}</td></tr>
-              <tr><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>항목</td><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.itemName} ({data.planType})</td></tr>
+              <tr><td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>학교명</td><td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.schoolName}</td></tr>
+              <tr><td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>항목</td><td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.itemName} ({data.planType})</td></tr>
               <tr>
-                <td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>1인당 월 단가 / 인원</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
+                <td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>1인당 월 단가 / 인원</td>
+                <td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{data.unitPrice.toLocaleString()}원 / {data.headcount}명</td>
               </tr>
-              <tr><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>계약기간</td><td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
+              <tr><td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>계약기간</td><td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>{months}개월 {days}일 ({data.serviceStart}~{data.serviceEnd})</td></tr>
               <tr>
-                <td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: 550, height: 32, minHeight: 32 }}>총 금액</td>
-                <td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: 550, height: 32, minHeight: 32 }}>{totalAmount.toLocaleString()}원</td>
+                <td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: 550, height: 32, minHeight: 32 }}>총 금액</td>
+                <td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: 550, height: 32, minHeight: 32 }}>{totalAmount.toLocaleString()}원</td>
               </tr>
               {data.discounts.length > 0 && data.discounts.map((d, i) => (
                 <tr key={i}>
-                  <td style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: 'red', height: 32, minHeight: 32 }}>{d.label}</td>
-                  <td style={{ border: '1px solid #bbb', padding: 8, color: 'red', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>
+                  <td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: 'red', height: 32, minHeight: 32 }}>{d.label}</td>
+                  <td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, color: 'red', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>
                     -{calculateDiscountAmount(d, totalAmount).toLocaleString()}원
                     {d.type === 'percentage' && ` (${d.amount}% 할인)`}
                   </td>
@@ -228,8 +252,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
               ))}
               {data.discounts.length > 0 && (
                 <tr style={{ background: '#f8f8f8' }}>
-                  <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>최종 견적가</td>
-                  <td style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#000', height: 32, minHeight: 32 }}>
+                  <td data-label="구분" style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: 32, minHeight: 32 }}>최종 견적가</td>
+                  <td data-label="내용" style={{ border: '1px solid #bbb', padding: 8, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#000', height: 32, minHeight: 32 }}>
                     {finalAmount.toLocaleString()}원
                     <span style={{ marginLeft: 8, fontSize: 15, color: '#888' }}>({convertToKoreanNumber(Math.round(finalAmount))})</span>
                   </td>
