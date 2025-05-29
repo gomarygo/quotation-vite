@@ -143,8 +143,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
         {/* 제목 */}
         <h2 style={{ textAlign: 'center', margin: '0 0 clamp(16px, 4vw, 32px) 0', fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 700, letterSpacing: 4 }}>견적서</h2>
         {/* 상단 정보 + 직인 */}
-        <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', lineHeight: 1.7, marginBottom: 16, position: 'relative', minHeight: 100 }}>
-          <div>
+        <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', lineHeight: 1.7, marginBottom: 16 }}>
+          <div style={{ display: 'inline-block', position: 'relative', minWidth: 280, verticalAlign: 'top' }}>
             <div><b>작성일자:</b> {currentDate}</div>
             <div style={{ marginBottom: 12 }}><b>문서번호:</b> {docNumber}</div>
             <div>
@@ -154,15 +154,15 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
               <div><b>주소:</b> 서울특별시 강남구 언주로 540, 5층 (역삼동)</div>
               <div><b>전화:</b> 070-4281-4869 <b style={{ margin: '0 8px' }}>|</b> <b>메일:</b> tax@teamturing.com</div>
             </div>
-            {/* 직인 이미지 - PC에서는 겹치게, 모바일에서는 아래쪽 */}
+            {/* 직인 이미지 - PC에서는 글씨 끝에 맞춰 겹치게, 모바일에서는 아래쪽 */}
             <img
               src="stamp.png"
               alt="직인"
               style={{
-                position: 'absolute',
-                right: 0,
-                top: '50%',
-                transform: 'translateY(-50%)',
+                position: window.innerWidth > 600 ? 'absolute' : 'static',
+                right: window.innerWidth > 600 ? 0 : 'auto',
+                top: window.innerWidth > 600 ? '50%' : 'auto',
+                transform: window.innerWidth > 600 ? 'translateY(-50%)' : 'none',
                 width: 'clamp(60px, 15vw, 90px)',
                 height: 'clamp(60px, 15vw, 90px)',
                 objectFit: 'contain',
@@ -171,13 +171,8 @@ const QuotationPreview: React.FC<QuotationPreviewProps> = ({ data, onBack }) => 
                 border: 'none',
                 pointerEvents: 'none',
                 zIndex: 2,
-                /* 모바일에서는 static으로 변경 */
-                ...(window.innerWidth <= 600 ? {
-                  position: 'static',
-                  display: 'block',
-                  margin: '16px auto 0',
-                  transform: 'none',
-                } : {})
+                margin: window.innerWidth > 600 ? 0 : '16px auto 0',
+                display: window.innerWidth > 600 ? 'block' : 'block'
               }}
             />
           </div>
